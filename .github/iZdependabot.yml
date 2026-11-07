@@ -1,0 +1,18 @@
+```yaml
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+```
+
+Configuration Details:
+- **version: 2**: Specifies the schema version for the Dependabot configuration file.
+- **package-ecosystem**: Defines the package manager or service Dependabot should monitor (e.g., `npm`, `pip`, `docker`, or `github-actions`).
+- **directory**: Indicates the path where the manifest files (like `package.json` or `requirements.txt`) are located.
+- **schedule**: Determines how often Dependabot checks for updates; `"weekly"` is a standard setting that balances security coverage with developer productivity.
