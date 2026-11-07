@@ -1,9 +1,9 @@
 import React from 'react';
-import { Rocket, Globe, Shield, Activity, Download, Volume2, VolumeX } from 'lucide-react';
+import { Rocket, Globe, Shield, Activity, Download, Volume2, VolumeX, HardDrive } from 'lucide-react';
 
 interface NavigationProps {
-  activeTab: 'flight' | 'planetary' | 'telemetry' | 'export';
-  setActiveTab: (tab: 'flight' | 'planetary' | 'telemetry' | 'export') => void;
+  activeTab: 'flight' | 'planetary' | 'telemetry' | 'drive' | 'export';
+  setActiveTab: (tab: 'flight' | 'planetary' | 'telemetry' | 'drive' | 'export') => void;
   audioEnabled: boolean;
   onToggleAudio: () => void;
   onTriggerFlight: () => void;
@@ -66,6 +66,17 @@ export const Navigation: React.FC<NavigationProps> = ({
         </button>
 
         <button
+          onClick={() => setActiveTab('drive')}
+          className={`hover:text-white transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 ${
+            activeTab === 'drive' ? 'text-cyan-400 font-semibold' : ''
+          }`}
+        >
+          <HardDrive className="w-4 h-4 text-cyan-400" />
+          <span>Google Drive</span>
+          <span className="px-1.5 py-0.2 rounded text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-800">App</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab('export')}
           className={`hover:text-white transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 ${
             activeTab === 'export' ? 'text-cyan-400' : ''
@@ -80,7 +91,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       <div className="flex items-center gap-3 shrink-0">
         <button
           onClick={onToggleAudio}
-          className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-colors"
+          className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-colors cursor-pointer"
           title={audioEnabled ? 'Mute Audio' : 'Unmute Audio'}
           aria-label={audioEnabled ? 'Mute Audio' : 'Unmute Audio'}
         >
@@ -89,7 +100,7 @@ export const Navigation: React.FC<NavigationProps> = ({
 
         <button
           onClick={onTriggerFlight}
-          className="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-sky-500 to-indigo-600 rounded-lg hover:from-sky-400 hover:to-indigo-500 transition-all shadow-md shadow-indigo-500/20 whitespace-nowrap flex items-center gap-2"
+          className="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-sky-500 to-indigo-600 rounded-lg hover:from-sky-400 hover:to-indigo-500 transition-all shadow-md shadow-indigo-500/20 whitespace-nowrap flex items-center gap-2 cursor-pointer"
         >
           <Shield className="w-3.5 h-3.5" />
           <span>Engage Flight</span>

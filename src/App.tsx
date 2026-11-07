@@ -5,17 +5,39 @@ import { PlanetaryMeshCanvas } from './components/PlanetaryMeshCanvas';
 import { CloudNodeInspector } from './components/CloudNodeInspector';
 import { AnomalySimulator } from './components/AnomalySimulator';
 import { StandaloneGameModal } from './components/StandaloneGameModal';
+import { PolluxCopilotModal } from './components/PolluxCopilotModal';
+import { GoogleDriveWorkspace } from './components/GoogleDriveWorkspace';
 import { INITIAL_CLOUD_NODES, INITIAL_NETWORK_CONNECTIONS } from './data/mockCloudMesh';
 import { CloudNode } from './types/cloud';
 import { audioSynth } from './utils/audio';
-import { Rocket, Globe, Shield, Activity, Download, ChevronUp, ChevronDown } from 'lucide-react';
+import { Rocket, Globe, Shield, Activity, Download, ChevronUp, ChevronDown, Bot, Music, Crosshair, Award, HardDrive } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'flight' | 'planetary' | 'telemetry' | 'export'>('flight');
+  const [activeTab, setActiveTab] = useState<'flight' | 'planetary' | 'telemetry' | 'drive' | 'export'>('flight');
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [cloudNodes, setCloudNodes] = useState<CloudNode[]>(INITIAL_CLOUD_NODES);
   const [selectedNode, setSelectedNode] = useState<CloudNode | null>(INITIAL_CLOUD_NODES[0]);
   const [isDockCollapsed, setIsDockCollapsed] = useState(false);
+  const [isCopilotOpen, setIsCopilotOpen] = useState(false);
+
+  // Live flight telemetry for Pollux AI Copilot
+  const [telemetry, setTelemetry] = useState({
+    score: 0,
+    distance: 0,
+    nearMisses: 0,
+    shieldEnergy: 1.0,
+    difficultyTier: 1,
+    speed: 14.0
+  });
+
+  const handleScoreUpdate = (score: number, distance: number, nearMisses: number) => {
+    setTelemetry((prev) => ({
+      ...prev,
+      score,
+      distance,
+      nearMisses
+    }));
+  };
 
   // Audio Toggle
   const handleToggleAudio = () => {
@@ -111,53 +133,77 @@ export default function App() {
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-32">
         {/* Mode Switcher Tabs */}
-        <div className="flex items-center gap-2 p-1.5 bg-slate-900 border border-slate-800 rounded-xl w-fit">
-          <button
-            onClick={() => setActiveTab('flight')}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'flight'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/30'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Rocket className="w-3.5 h-3.5" />
-            <span>3D Flight Simulator</span>
-          </button>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-2 p-1.5 bg-slate-900 border border-slate-800 rounded-xl w-fit">
+            <button
+              onClick={() => setActiveTab('flight')}
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+                activeTab === 'flight'
+                  ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/30 font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Rocket className="w-3.5 h-3.5" />
+              <span>3D Flight Simulator</span>
+            </button>
 
-          <button
-            onClick={() => setActiveTab('planetary')}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'planetary'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/30'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Globe className="w-3.5 h-3.5" />
-            <span>Planetary Multi-Cloud Mesh</span>
-          </button>
+            <button
+              onClick={() => setActiveTab('planetary')}
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+                activeTab === 'planetary'
+                  ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/30 font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Globe className="w-3.5 h-3.5" />
+              <span>Planetary Multi-Cloud Mesh</span>
+            </button>
 
-          <button
-            onClick={() => setActiveTab('telemetry')}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'telemetry'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/30'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Activity className="w-3.5 h-3.5" />
-            <span>Graviton Telemetry</span>
-          </button>
+            <button
+              onClick={() => setActiveTab('telemetry')}
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+                activeTab === 'telemetry'
+                  ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/30 font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>Graviton Telemetry</span>
+            </button>
 
+            <button
+              onClick={() => setActiveTab('drive')}
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+                activeTab === 'drive'
+                  ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/30 font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <HardDrive className="w-3.5 h-3.5" />
+              <span>Google Drive App</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('export')}
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+                activeTab === 'export'
+                  ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/30 font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Standalone HTML5 Game</span>
+            </button>
+          </div>
+
+          {/* Quick Copilot Launcher in Header */}
           <button
-            onClick={() => setActiveTab('export')}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'export'
-                ? 'bg-cyan-500 text-slate-950 shadow-sm shadow-cyan-500/30'
-                : 'text-slate-400 hover:text-white'
-            }`}
+            onClick={() => setIsCopilotOpen(true)}
+            className="px-4 py-2 rounded-xl bg-slate-900 border border-cyan-500/40 hover:border-cyan-400 text-cyan-300 text-xs font-bold flex items-center gap-2 shadow-lg shadow-cyan-950/40 cursor-pointer transition-all"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Standalone HTML5 Game</span>
+            <Bot className="w-4 h-4 text-cyan-400" />
+            <span>Pollux AI Copilot</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           </button>
         </div>
 
@@ -170,48 +216,64 @@ export default function App() {
                   Antigravity Flight Simulation
                 </h1>
                 <p className="text-sm text-slate-400 mt-1 max-w-2xl">
-                  Pilot the experimental AGP-1 starcraft through procedural gravity wells.
-                  Activate your antigravity repulsion shield to defy catastrophic spatial collapse.
+                  Pilot the experimental AGP-1 starcraft. Blast rogue planetary cores with plasma blasters,
+                  activate your antigravity repulsion shield, and navigate through intense gravitational distortion.
                 </p>
               </div>
 
               <div className="flex items-center gap-2 text-xs text-slate-400">
-                <span className="font-semibold text-cyan-400">Physics Engine:</span>
-                <span>F = G · M / d²</span>
+                <span className="font-semibold text-cyan-400">Weaponry:</span>
+                <span>Dual Plasma Lasers</span>
                 <span className="text-slate-600">·</span>
-                <span>Near-Miss Radius 2.0</span>
+                <span>Repulsion Radius 5.0</span>
                 <span className="text-slate-600">·</span>
-                <span>Singularity 1.0</span>
+                <span>Synthwave Audio</span>
               </div>
             </div>
 
             {/* Embedded High-Performance Three.js Game */}
-            <AntigravityGameCanvas />
+            <AntigravityGameCanvas
+              onScoreUpdate={handleScoreUpdate}
+              onOpenCopilot={() => setIsCopilotOpen(true)}
+              onSaveToDrive={() => setActiveTab('drive')}
+            />
 
-            {/* Quick Specs Strip */}
+            {/* Feature Highlights Strip */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
               <div className="bg-slate-900/60 border border-slate-800/80 rounded-xl p-4">
-                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Lateral Banking</div>
-                <div className="text-lg font-bold text-white mt-1">Dynamic Roll Physics</div>
-                <div className="text-xs text-slate-500 mt-0.5">Proportional to X velocity</div>
+                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Crosshair className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Plasma Blasters</span>
+                </div>
+                <div className="text-base font-bold text-white mt-1">Shoot Planets & Wells</div>
+                <div className="text-xs text-slate-500 mt-0.5">Left-Click or F key to fire</div>
               </div>
 
               <div className="bg-slate-900/60 border border-slate-800/80 rounded-xl p-4">
-                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Antigravity Shield</div>
-                <div className="text-lg font-bold text-indigo-400 mt-1">Radius 5.0 Repulsion</div>
-                <div className="text-xs text-slate-500 mt-0.5">20%/s drain · 5%/s regen</div>
+                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Music className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Synthwave Audio</span>
+                </div>
+                <div className="text-base font-bold text-indigo-400 mt-1">124 BPM Cyberpunk BGM</div>
+                <div className="text-xs text-slate-500 mt-0.5">Dynamic banking & rumble SFX</div>
               </div>
 
               <div className="bg-slate-900/60 border border-slate-800/80 rounded-xl p-4">
-                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Well Variations</div>
-                <div className="text-lg font-bold text-amber-400 mt-1">Pulsing & Binary</div>
-                <div className="text-xs text-slate-500 mt-0.5">Unlocks at score 10, 25, 50</div>
+                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Award className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Flight Academy</span>
+                </div>
+                <div className="text-base font-bold text-amber-400 mt-1">Step-by-Step Tutorial</div>
+                <div className="text-xs text-slate-500 mt-0.5">Visual goals & skippable</div>
               </div>
 
               <div className="bg-slate-900/60 border border-slate-800/80 rounded-xl p-4">
-                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Escalation Curve</div>
-                <div className="text-lg font-bold text-cyan-400 mt-1">15s Graviton Surge</div>
-                <div className="text-xs text-slate-500 mt-0.5">+10% gravity · +5% speed</div>
+                <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Bot className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Pollux AI Copilot</span>
+                </div>
+                <div className="text-base font-bold text-emerald-400 mt-1">Live Flight Companion</div>
+                <div className="text-xs text-slate-500 mt-0.5">Tactical telemetry analysis</div>
               </div>
             </div>
           </section>
@@ -360,13 +422,30 @@ export default function App() {
           </section>
         )}
 
-        {/* View 4: Standalone Deliverable Export */}
+        {/* View 4: Google Drive Workspace App */}
+        {activeTab === 'drive' && (
+          <section className="space-y-6">
+            <GoogleDriveWorkspace
+              currentFlightTelemetry={telemetry}
+              onSwitchToFlight={() => setActiveTab('flight')}
+            />
+          </section>
+        )}
+
+        {/* View 5: Standalone Deliverable Export */}
         {activeTab === 'export' && (
           <section className="space-y-6">
             <StandaloneGameModal />
           </section>
         )}
       </main>
+
+      {/* Floating Pollux AI Copilot Dialog */}
+      <PolluxCopilotModal
+        isOpen={isCopilotOpen}
+        onClose={() => setIsCopilotOpen(false)}
+        flightTelemetry={telemetry}
+      />
 
       {/* Ergonomic Collapsible Bottom Dock (Zero Viewport Occlusion) */}
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[92vw]">
@@ -400,6 +479,15 @@ export default function App() {
                 Planetary Mesh
               </button>
               <button
+                onClick={() => setActiveTab('drive')}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer flex items-center gap-1 ${
+                  activeTab === 'drive' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                <HardDrive className="w-3 h-3" />
+                <span>Drive</span>
+              </button>
+              <button
                 onClick={() => setActiveTab('export')}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${
                   activeTab === 'export' ? 'bg-cyan-500 text-slate-950 font-bold' : 'text-slate-300 hover:text-white'
@@ -410,6 +498,14 @@ export default function App() {
             </div>
 
             <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsCopilotOpen(!isCopilotOpen)}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 hover:text-white transition-colors cursor-pointer flex items-center gap-1.5"
+              >
+                <Bot className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Pollux</span>
+              </button>
+
               <button
                 onClick={handleToggleAudio}
                 className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 border border-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"

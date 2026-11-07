@@ -27,8 +27,9 @@
       width: 100%;
       height: 100%;
       z-index: 1;
+      cursor: crosshair;
     }
-    /* Edge Flash Overlay */
+    /* Edge Flash Overlays */
     #edge-flash {
       position: absolute;
       top: 0;
@@ -52,6 +53,10 @@
     #edge-flash.shield {
       opacity: 0.6;
       box-shadow: inset 0 0 100px 30px rgba(99, 102, 241, 0.75);
+    }
+    #edge-flash.laser {
+      opacity: 0.4;
+      box-shadow: inset 0 0 60px 15px rgba(56, 189, 248, 0.5);
     }
 
     /* Primary HUD */
@@ -78,22 +83,22 @@
 
     .metric-group {
       display: flex;
-      gap: 28px;
+      gap: 16px;
     }
 
     .metric-card {
       display: flex;
       flex-direction: column;
-      background: rgba(10, 16, 30, 0.7);
+      background: rgba(10, 16, 30, 0.75);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 12px;
-      padding: 10px 18px;
-      min-width: 110px;
+      padding: 8px 16px;
+      min-width: 95px;
     }
     .metric-label {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.12em;
@@ -101,7 +106,7 @@
       margin-bottom: 2px;
     }
     .metric-value {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
       color: #f8fafc;
       font-variant-numeric: tabular-nums;
@@ -118,12 +123,12 @@
     .shield-container {
       display: flex;
       flex-direction: column;
-      background: rgba(10, 16, 30, 0.7);
+      background: rgba(10, 16, 30, 0.75);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 12px;
-      padding: 12px 18px;
-      min-width: 260px;
+      padding: 10px 16px;
+      min-width: 220px;
     }
     .shield-header {
       display: flex;
@@ -133,12 +138,12 @@
     }
     .shield-bar-bg {
       width: 100%;
-      height: 12px;
-      background: rgba(15, 23, 42, 0.8);
+      height: 10px;
+      background: rgba(15, 23, 42, 0.85);
       border-radius: 6px;
       overflow: hidden;
       position: relative;
-      border: 1px solid rgba(99, 102, 241, 0.25);
+      border: 1px solid rgba(99, 102, 241, 0.3);
     }
     .shield-bar-fill {
       height: 100%;
@@ -153,10 +158,75 @@
       box-shadow: 0 0 14px rgba(244, 63, 94, 0.8);
     }
 
+    /* In-game Tutorial Overlay */
+    #tutorial-overlay {
+      display: none;
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10, 16, 30, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.25);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 18px 24px;
+      max-width: 520px;
+      width: 90%;
+      pointer-events: auto;
+      z-index: 25;
+      animation: modalPop 0.25s ease-out;
+    }
+    .tut-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .tut-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .tut-skip {
+      font-size: 12px;
+      color: #94a3b8;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .tut-skip:hover { color: #f8fafc; }
+    .tut-desc {
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .tut-progress-bg {
+      width: 100%;
+      height: 6px;
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .tut-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #6366f1);
+      transition: width 0.1s linear;
+    }
+
     /* Notification Banner */
     #banner-container {
       position: absolute;
-      top: 100px;
+      top: 140px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -167,13 +237,13 @@
       z-index: 20;
     }
     .surge-banner {
-      background: rgba(15, 23, 42, 0.9);
+      background: rgba(15, 23, 42, 0.92);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(56, 189, 248, 0.4);
       color: #38bdf8;
       padding: 8px 24px;
       border-radius: 9999px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -218,21 +288,21 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      font-size: 13px;
+      font-size: 12px;
       color: #94a3b8;
-      background: rgba(10, 16, 30, 0.7);
+      background: rgba(10, 16, 30, 0.75);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 10px 18px;
+      padding: 8px 16px;
       border-radius: 12px;
       pointer-events: auto;
     }
     .key-badge {
       display: inline-block;
-      padding: 3px 8px;
+      padding: 2px 6px;
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 6px;
+      border-radius: 5px;
       color: #f1f5f9;
       font-weight: 600;
       font-size: 11px;
@@ -244,133 +314,90 @@
       background: rgba(15, 23, 42, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: #f1f5f9;
-      padding: 10px 18px;
+      padding: 8px 14px;
       border-radius: 10px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
     .hud-btn:hover {
       background: rgba(30, 41, 59, 0.95);
       border-color: rgba(56, 189, 248, 0.5);
       transform: translateY(-1px);
     }
-    .hud-btn:active {
-      transform: translateY(0);
-    }
 
-    /* Mobile Shield Touch Button */
-    #mobile-shield-btn {
+    /* Audio Settings Popover */
+    #audio-modal {
       display: none;
       position: absolute;
-      bottom: 30px;
-      right: 30px;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #6366f1 0%, #312e81 100%);
-      border: 2px solid #818cf8;
-      box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      bottom: 75px;
+      right: 32px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+      border-radius: 16px;
+      padding: 18px;
+      width: 260px;
+      z-index: 40;
+      pointer-events: auto;
+    }
+    .audio-row {
+      margin-bottom: 12px;
+    }
+    .audio-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #94a3b8;
+      margin-bottom: 4px;
+    }
+    .audio-slider {
+      width: 100%;
+      height: 4px;
+      background: #334155;
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Mobile Buttons */
+    .mobile-controls {
+      display: none;
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      gap: 12px;
       pointer-events: auto;
       z-index: 30;
+    }
+    .mob-btn {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #fff;
       touch-action: none;
     }
-    #mobile-shield-btn.active {
+    #mobile-fire-btn {
       background: radial-gradient(circle, #38bdf8 0%, #0369a1 100%);
-      box-shadow: 0 0 35px rgba(56, 189, 248, 0.9);
-      transform: scale(0.95);
+      border: 2px solid #7dd3fc;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
     }
-
-    /* Game Over Modal */
-    #game-over-modal {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(3, 7, 18, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      z-index: 50;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .modal-box {
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(10, 16, 30, 0.98));
-      border: 1px solid rgba(244, 63, 94, 0.4);
-      box-shadow: 0 0 50px rgba(244, 63, 94, 0.25);
-      border-radius: 20px;
-      padding: 40px 48px;
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes modalPop {
-      0% { opacity: 0; transform: scale(0.9); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-    .modal-title {
-      font-size: 32px;
-      font-weight: 800;
-      color: #f43f5e;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      text-shadow: 0 0 25px rgba(244, 63, 94, 0.6);
-    }
-    .modal-sub {
-      font-size: 14px;
-      color: #94a3b8;
-      margin-bottom: 28px;
-    }
-    .score-summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 32px;
-      text-align: left;
-    }
-    .score-summary-card {
-      background: rgba(30, 41, 59, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 14px 18px;
-      border-radius: 12px;
-    }
-    .modal-actions {
-      display: flex;
-      gap: 14px;
-      justify-content: center;
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, #0ea5e9, #6366f1);
-      color: #ffffff;
-      border: none;
-      border-radius: 12px;
-      padding: 14px 28px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-    }
-    .btn-primary:hover {
-      box-shadow: 0 0 30px rgba(99, 102, 241, 0.7);
-      transform: translateY(-2px);
+    #mobile-shield-btn {
+      background: radial-gradient(circle, #6366f1 0%, #312e81 100%);
+      border: 2px solid #818cf8;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
     }
 
     /* Start / Instructions Screen */
@@ -389,89 +416,155 @@
       padding: 24px;
     }
     .start-card {
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.88);
       border: 1px solid rgba(56, 189, 248, 0.3);
       box-shadow: 0 0 60px rgba(56, 189, 248, 0.15);
       border-radius: 24px;
-      padding: 44px 52px;
+      padding: 40px 48px;
       max-width: 600px;
       width: 100%;
       text-align: center;
     }
     .game-logo {
-      font-size: 42px;
+      font-size: 38px;
       font-weight: 900;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .game-tagline {
-      font-size: 15px;
+      font-size: 14px;
       color: #cbd5e1;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       line-height: 1.5;
     }
     .rules-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 12px;
       text-align: left;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
     .rule-item {
       background: rgba(30, 41, 59, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
-      padding: 12px 16px;
+      padding: 10px 14px;
     }
     .rule-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: #38bdf8;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      margin-bottom: 3px;
     }
     .rule-desc {
-      font-size: 12px;
+      font-size: 11px;
       color: #94a3b8;
       line-height: 1.4;
     }
+    .start-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-primary {
+      flex: 1;
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 13px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.7);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      flex: 1;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      border-radius: 12px;
+      padding: 13px 24px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-secondary:hover {
+      background: rgba(56, 189, 248, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Game Over Modal */
+    #game-over-modal {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(3, 7, 18, 0.88);
+      backdrop-filter: blur(12px);
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), rgba(10, 16, 30, 0.98));
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      box-shadow: 0 0 50px rgba(244, 63, 94, 0.25);
+      border-radius: 20px;
+      padding: 36px 44px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalPop {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .modal-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #f43f5e;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .score-summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 24px 0;
+      text-align: left;
+    }
+    .score-summary-card {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 10px 14px;
+      border-radius: 12px;
+    }
 
     @media (max-width: 768px) {
-      #hud {
-        padding: 16px;
-      }
-      .metric-card {
-        padding: 6px 12px;
-        min-width: 80px;
-      }
-      .metric-value {
-        font-size: 20px;
-      }
-      .shield-container {
-        min-width: 180px;
-        padding: 8px 12px;
-      }
-      .controls-hint {
-        display: none;
-      }
-      #mobile-shield-btn {
-        display: flex;
-      }
-      .start-card {
-        padding: 28px 20px;
-      }
-      .rules-grid {
-        grid-template-columns: 1fr;
-      }
-      .game-logo {
-        font-size: 32px;
-      }
+      #hud { padding: 14px; }
+      .metric-card { padding: 6px 10px; min-width: 75px; }
+      .metric-value { font-size: 18px; }
+      .shield-container { min-width: 160px; padding: 6px 10px; }
+      .controls-hint { display: none; }
+      .mobile-controls { display: flex; }
+      .start-card { padding: 24px 18px; }
+      .rules-grid { grid-template-columns: 1fr; }
+      .game-logo { font-size: 28px; }
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -481,11 +574,26 @@
   <div id="edge-flash"></div>
   <div id="banner-container"></div>
 
+  <!-- Interactive In-Game Tutorial Prompt -->
+  <div id="tutorial-overlay">
+    <div class="tut-header">
+      <span class="tut-tag" id="tut-step-tag">Step 1 / 4: Steering & Banking</span>
+      <button class="tut-skip" id="tut-skip-btn">Skip Tutorial</button>
+    </div>
+    <div class="tut-desc" id="tut-desc-text">
+      Move your cursor or touch drag left and right. Notice the aerodynamic lateral roll of your starcraft as it adjusts flight vectors.
+    </div>
+    <div class="tut-progress-bg">
+      <div class="tut-progress-fill" id="tut-progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- Primary HUD -->
   <div id="hud">
     <div class="top-bar">
       <div class="metric-group">
         <div class="metric-card">
-          <span class="metric-label">Wells Evaded</span>
+          <span class="metric-label">Score</span>
           <span class="metric-value" id="hud-score">0</span>
         </div>
         <div class="metric-card">
@@ -501,85 +609,128 @@
         </div>
       </div>
 
-      <div class="shield-container">
-        <div class="shield-header">
-          <span class="metric-label">Antigravity Shield</span>
-          <span class="metric-label" id="hud-shield-pct" style="color: #818cf8;">100%</span>
-        </div>
-        <div class="shield-bar-bg">
-          <div class="shield-bar-fill" id="shield-bar"></div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button class="hud-btn" id="voice-comms-toggle" title="Hands-free Pollux Voice Comms (V)">
+          <span id="voice-btn-label">🎙️ Voice [V]</span>
+        </button>
+
+        <button class="hud-btn" id="audio-settings-toggle">
+          <span>🔊 Sound</span>
+        </button>
+
+        <div class="shield-container">
+          <div class="shield-header">
+            <span class="metric-label">Shield</span>
+            <span class="metric-label" id="hud-shield-pct" style="color: #818cf8;">100%</span>
+          </div>
+          <div class="shield-bar-bg">
+            <div class="shield-bar-fill" id="shield-bar"></div>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Cockpit Voice Comms Banner -->
+    <div id="voice-banner" style="display: none; position: absolute; top: 74px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(56, 189, 248, 0.5); border-radius: 12px; padding: 8px 18px; font-size: 12px; color: #fff; z-index: 25; box-shadow: 0 0 20px rgba(56, 189, 248, 0.25); backdrop-filter: blur(8px); text-align: center; pointer-events: auto;">
+      <span id="voice-badge" style="background: rgba(99, 102, 241, 0.25); border: 1px solid #6366f1; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; margin-right: 6px; color: #a5b4fc;">POLLUX COMMS</span>
+      <span id="voice-text">Say "Fire", "Shield", "Status report", or "Relaunch"</span>
     </div>
 
     <div class="bottom-bar">
       <div class="controls-hint">
-        <span><span class="key-badge">Mouse / Touch</span> Steer Ship</span>
-        <span><span class="key-badge">Spacebar</span> Antigravity Shield (Repel)</span>
-        <span><span class="key-badge">M</span> Audio</span>
-      </div>
-      <div style="display: flex; gap: 10px;">
-        <button class="hud-btn" id="audio-toggle-btn" title="Toggle Sound">
-          <span id="audio-icon">🔊 Sound ON</span>
-        </button>
+        <span><span class="key-badge">Mouse / Touch</span> Steer</span>
+        <span><span class="key-badge">Left Click / F</span> Fire</span>
+        <span><span class="key-badge">Spacebar</span> Shield</span>
+        <span><span class="key-badge" style="background: rgba(56, 189, 248, 0.2); border-color: #38bdf8; color: #38bdf8;">V</span> Voice Comms</span>
       </div>
     </div>
   </div>
 
-  <div id="mobile-shield-btn">Hold<br>Shield</div>
+  <!-- Mobile On-Screen Action Buttons -->
+  <div class="mobile-controls">
+    <div class="mob-btn" id="mobile-fire-btn">FIRE</div>
+    <div class="mob-btn" id="mobile-shield-btn">SHIELD</div>
+  </div>
 
+  <!-- Audio Controls Popover -->
+  <div id="audio-modal">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <span style="font-size: 12px; font-weight: 700; color: #38bdf8;">AUDIO ENGINE</span>
+      <button id="audio-close-btn" style="background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 14px;">✕</button>
+    </div>
+    <div class="audio-row">
+      <div class="audio-label"><span>Master Volume</span><span id="txt-master-vol">80%</span></div>
+      <input type="range" min="0" max="1" step="0.05" value="0.8" class="audio-slider" id="slider-master">
+    </div>
+    <div class="audio-row">
+      <div class="audio-label"><span>Synthwave BGM</span><span id="txt-music-vol">55%</span></div>
+      <input type="range" min="0" max="1" step="0.05" value="0.55" class="audio-slider" id="slider-music">
+    </div>
+    <div class="audio-row">
+      <div class="audio-label"><span>Combat SFX</span><span id="txt-sfx-vol">75%</span></div>
+      <input type="range" min="0" max="1" step="0.05" value="0.75" class="audio-slider" id="slider-sfx">
+    </div>
+    <button class="hud-btn" id="btn-toggle-mute" style="width: 100%; justify-content: center; margin-top: 6px;">
+      <span>Mute / Unmute (M)</span>
+    </button>
+  </div>
+
+  <!-- Start Screen -->
   <div id="start-screen">
     <div class="start-card">
       <div class="game-logo">Antigravity</div>
       <p class="game-tagline">
         Navigate an experimental neon starcraft through procedural gravity wells.<br>
-        Activate your antigravity repulsion shield to defy gravitational collapse.
+        Neutralize gravitational collapse with your repulsion shield or blast cores with plasma blasters.
       </p>
 
       <div class="rules-grid">
         <div class="rule-item">
-          <div class="rule-title">⚡ Navigation & Bank</div>
-          <div class="rule-desc">Mouse or touch projects your destination onto the spatial flight plane. Aerodynamic banking matches lateral momentum.</div>
+          <div class="rule-title">⚡ Steering & Banking</div>
+          <div class="rule-desc">Mouse/touch projects position onto the flight plane. Craft banks smoothly with lateral velocity.</div>
         </div>
         <div class="rule-item">
-          <div class="rule-title">🛡️ Antigravity Shield</div>
-          <div class="rule-desc">Hold Spacebar (or touch button) to repel wells within radius 5. Drains at 20%/s; regenerates at 5%/s.</div>
+          <div class="rule-title">💥 Plasma Blasters</div>
+          <div class="rule-desc">Left-Click or F key fires twin lasers! Disintegrate incoming planetary cores and gravity wells.</div>
         </div>
         <div class="rule-item">
-          <div class="rule-title">🌀 Gravitational Physics</div>
-          <div class="rule-desc">Inverse square pull: F = G · M / d². Radius 1.0 = Fatal Singularity. Radius 2.0 = Near-Miss Bonus.</div>
+          <div class="rule-title">🛡️ Antigravity Repulsion</div>
+          <div class="rule-desc">Hold Spacebar to push wells within radius 5.0 away. Drains 20%/s, regenerates 5%/s.</div>
         </div>
         <div class="rule-item">
-          <div class="rule-title">🌌 Dynamic Escalation</div>
-          <div class="rule-desc">Every 15s gravity strengthens and scroll speeds up. Pulsing & Binary vortexes emerge at high scores.</div>
+          <div class="rule-title">🎵 Synthwave Space Audio</div>
+          <div class="rule-desc">Full procedural synthwave soundtrack, engine acceleration rumble, and dynamic proximity audio.</div>
         </div>
       </div>
 
-      <button class="btn-primary" id="start-btn" style="width: 100%;">
-        ENGAGE ENGINES
-      </button>
+      <div class="start-actions">
+        <button class="btn-secondary" id="start-tutorial-btn">
+          FLIGHT TUTORIAL
+        </button>
+        <button class="btn-primary" id="start-btn">
+          ENGAGE FREE FLIGHT
+        </button>
+      </div>
     </div>
   </div>
 
+  <!-- Game Over Screen -->
   <div id="game-over-modal">
     <div class="modal-box">
       <div class="modal-title">Singularity Collapse</div>
-      <p class="modal-sub">Your craft crossed the event horizon and was consumed.</p>
+      <p style="font-size: 13px; color: #94a3b8; margin-bottom: 20px;">Your craft was pulled past the event horizon.</p>
 
       <div class="score-summary-grid">
         <div class="score-summary-card">
-          <div class="metric-label">Wells Evaded</div>
+          <div class="metric-label">Score</div>
           <div class="metric-value" id="final-score">0</div>
         </div>
         <div class="score-summary-card">
-          <div class="metric-label">Distance Traveled</div>
-          <div>
-            <span class="metric-value" id="final-distance">0.0</span>
-            <span class="metric-unit">AU</span>
-          </div>
+          <div class="metric-label">Distance</div>
+          <div><span class="metric-value" id="final-distance">0.0</span><span class="metric-unit">AU</span></div>
         </div>
         <div class="score-summary-card">
-          <div class="metric-label">Near Miss Bonuses</div>
+          <div class="metric-label">Near Misses</div>
           <div class="metric-value" id="final-near-misses" style="color: #34d399;">0</div>
         </div>
         <div class="score-summary-card">
@@ -588,71 +739,328 @@
         </div>
       </div>
 
-      <div class="modal-actions">
-        <button class="btn-primary" id="restart-btn" style="width: 100%;">
-          RELAUNCH SPACECRAFT
-        </button>
+      <div class="start-actions">
+        <button class="btn-secondary" id="gameover-tut-btn">TUTORIAL</button>
+        <button class="btn-primary" id="restart-btn">RELAUNCH SPACECRAFT</button>
       </div>
     </div>
   </div>
 
   <script>
+    /* ==========================================================================
+       SYNTHWAVE SOUND ENGINE & PROCEDURAL AUDIO SYNTHESIZER
+       ========================================================================== */
     class SoundEngine {
       constructor() {
         this.ctx = null;
         this.enabled = true;
-        this.engineGain = null;
+        this.masterVolume = 0.8;
+        this.musicVolume = 0.55;
+        this.sfxVolume = 0.75;
+
+        this.masterGain = null;
+        this.musicGain = null;
+        this.sfxGain = null;
+
         this.engineOsc = null;
-        this.shieldGain = null;
+        this.engineGain = null;
+        this.engineFilter = null;
+
+        this.gravityOsc = null;
+        this.gravityGain = null;
+
         this.shieldOsc = null;
+        this.shieldGain = null;
+
+        this.isMusicPlaying = false;
+        this.musicTimerId = null;
+        this.step = 0;
+
+        this.bassNotes = [73.42, 58.27, 87.31, 65.41]; // D2, Bb1, F2, C2
+        this.arpScales = [
+          [293.66, 349.23, 440.0, 523.25, 587.33],
+          [233.08, 293.66, 349.23, 466.16, 587.33],
+          [349.23, 440.0, 523.25, 698.46, 880.0],
+          [261.63, 329.63, 392.0, 523.25, 659.25]
+        ];
       }
+
       init() {
         if (this.ctx) return;
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         if (!AudioContext) return;
         this.ctx = new AudioContext();
 
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.setValueAtTime(this.masterVolume, this.ctx.currentTime);
+        this.masterGain.connect(this.ctx.destination);
+
+        this.musicGain = this.ctx.createGain();
+        this.musicGain.gain.setValueAtTime(this.musicVolume, this.ctx.currentTime);
+        this.musicGain.connect(this.masterGain);
+
+        this.sfxGain = this.ctx.createGain();
+        this.sfxGain.gain.setValueAtTime(this.sfxVolume, this.ctx.currentTime);
+        this.sfxGain.connect(this.masterGain);
+
+        // Engine drone
         this.engineOsc = this.ctx.createOscillator();
         this.engineGain = this.ctx.createGain();
+        this.engineFilter = this.ctx.createBiquadFilter();
+
         this.engineOsc.type = 'sawtooth';
-        this.engineOsc.frequency.setValueAtTime(65, this.ctx.currentTime);
+        this.engineOsc.frequency.setValueAtTime(58, this.ctx.currentTime);
+        this.engineFilter.type = 'lowpass';
+        this.engineFilter.frequency.setValueAtTime(160, this.ctx.currentTime);
         this.engineGain.gain.setValueAtTime(0.04, this.ctx.currentTime);
 
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(220, this.ctx.currentTime);
-
-        this.engineOsc.connect(filter);
-        filter.connect(this.engineGain);
-        this.engineGain.connect(this.ctx.destination);
+        this.engineOsc.connect(this.engineFilter);
+        this.engineFilter.connect(this.engineGain);
+        this.engineGain.connect(this.sfxGain);
         this.engineOsc.start();
 
+        // Gravity well rumble
+        this.gravityOsc = this.ctx.createOscillator();
+        this.gravityGain = this.ctx.createGain();
+        this.gravityOsc.type = 'triangle';
+        this.gravityOsc.frequency.setValueAtTime(42, this.ctx.currentTime);
+        this.gravityGain.gain.setValueAtTime(0.0, this.ctx.currentTime);
+
+        const gravFilter = this.ctx.createBiquadFilter();
+        gravFilter.type = 'lowpass';
+        gravFilter.frequency.setValueAtTime(120, this.ctx.currentTime);
+
+        this.gravityOsc.connect(gravFilter);
+        gravFilter.connect(this.gravityGain);
+        this.gravityGain.connect(this.sfxGain);
+        this.gravityOsc.start();
+
+        // Shield hum
         this.shieldOsc = this.ctx.createOscillator();
         this.shieldGain = this.ctx.createGain();
         this.shieldOsc.type = 'sine';
-        this.shieldOsc.frequency.setValueAtTime(240, this.ctx.currentTime);
+        this.shieldOsc.frequency.setValueAtTime(260, this.ctx.currentTime);
         this.shieldGain.gain.setValueAtTime(0.0, this.ctx.currentTime);
 
         const shieldFilter = this.ctx.createBiquadFilter();
         shieldFilter.type = 'bandpass';
-        shieldFilter.frequency.setValueAtTime(400, this.ctx.currentTime);
-        shieldFilter.Q.setValueAtTime(3.0, this.ctx.currentTime);
+        shieldFilter.frequency.setValueAtTime(450, this.ctx.currentTime);
+        shieldFilter.Q.setValueAtTime(3.5, this.ctx.currentTime);
 
         this.shieldOsc.connect(shieldFilter);
         shieldFilter.connect(this.shieldGain);
-        this.shieldGain.connect(this.ctx.destination);
+        this.shieldGain.connect(this.sfxGain);
         this.shieldOsc.start();
+
+        this.startMusic();
       }
 
-      setShieldState(active, energyRatio) {
+      startMusic() {
+        if (this.isMusicPlaying || !this.ctx) return;
+        this.isMusicPlaying = true;
+        this.step = 0;
+
+        const stepDuration = (60 / 124) / 4;
+
+        const tickMusic = () => {
+          if (!this.isMusicPlaying || !this.ctx || !this.musicGain) return;
+          const now = this.ctx.currentTime;
+          const bar = Math.floor(this.step / 16);
+          const stepInBar = this.step % 16;
+          const chord = bar % 4;
+
+          // Bass
+          if (stepInBar % 2 === 0) {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            const filter = this.ctx.createBiquadFilter();
+
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(this.bassNotes[chord], now);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(380, now);
+            filter.frequency.exponentialRampToValueAtTime(70, now + stepDuration * 1.8);
+
+            gain.gain.setValueAtTime(0.18, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + stepDuration * 1.9);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.musicGain);
+
+            osc.start(now);
+            osc.stop(now + stepDuration * 2);
+          }
+
+          // Arpeggio
+          const scale = this.arpScales[chord];
+          const note = scale[stepInBar % scale.length];
+          if (stepInBar % 2 === 1 || stepInBar % 4 === 2) {
+            const arpOsc = this.ctx.createOscillator();
+            const arpGain = this.ctx.createGain();
+            const arpFilter = this.ctx.createBiquadFilter();
+
+            arpOsc.type = 'square';
+            arpOsc.frequency.setValueAtTime(note, now);
+
+            arpFilter.type = 'bandpass';
+            arpFilter.frequency.setValueAtTime(800 + Math.sin(this.step * 0.2) * 400, now);
+            arpFilter.Q.setValueAtTime(2.5, now);
+
+            arpGain.gain.setValueAtTime(0.06, now);
+            arpGain.gain.exponentialRampToValueAtTime(0.001, now + stepDuration * 0.9);
+
+            arpOsc.connect(arpFilter);
+            arpFilter.connect(arpGain);
+            arpGain.connect(this.musicGain);
+
+            arpOsc.start(now);
+            arpOsc.stop(now + stepDuration);
+          }
+
+          // Kick
+          if (stepInBar % 4 === 0) {
+            const kickOsc = this.ctx.createOscillator();
+            const kickGain = this.ctx.createGain();
+
+            kickOsc.type = 'sine';
+            kickOsc.frequency.setValueAtTime(130, now);
+            kickOsc.frequency.exponentialRampToValueAtTime(35, now + 0.12);
+
+            kickGain.gain.setValueAtTime(0.16, now);
+            kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+
+            kickOsc.connect(kickGain);
+            kickGain.connect(this.musicGain);
+
+            kickOsc.start(now);
+            kickOsc.stop(now + 0.14);
+          }
+
+          this.step++;
+          this.musicTimerId = window.setTimeout(tickMusic, stepDuration * 1000);
+        };
+
+        tickMusic();
+      }
+
+      playLaserShot() {
         if (!this.ctx || !this.enabled) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const filter = this.ctx.createBiquadFilter();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(1400, now);
+        osc.frequency.exponentialRampToValueAtTime(220, now + 0.14);
+
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(1600, now);
+        filter.frequency.exponentialRampToValueAtTime(300, now + 0.14);
+
+        gain.gain.setValueAtTime(0.22, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.sfxGain);
+
+        osc.start(now);
+        osc.stop(now + 0.15);
+      }
+
+      playPlanetExplosion() {
+        if (!this.ctx || !this.enabled) return;
+        const now = this.ctx.currentTime;
+
+        const subOsc = this.ctx.createOscillator();
+        const subGain = this.ctx.createGain();
+        subOsc.type = 'sine';
+        subOsc.frequency.setValueAtTime(110, now);
+        subOsc.frequency.exponentialRampToValueAtTime(25, now + 0.45);
+
+        subGain.gain.setValueAtTime(0.35, now);
+        subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+        subOsc.connect(subGain);
+        subGain.connect(this.sfxGain);
+        subOsc.start(now);
+        subOsc.stop(now + 0.5);
+
+        const bufferSize = this.ctx.sampleRate * 0.4;
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.frequency.setValueAtTime(700, now);
+        filter.frequency.exponentialRampToValueAtTime(80, now + 0.4);
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.28, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.sfxGain);
+        noise.start(now);
+      }
+
+      updateShipAudio(speed, lateralVelocity) {
+        if (!this.ctx || !this.enabled || !this.engineOsc) return;
+        const now = this.ctx.currentTime;
+        const targetFreq = 54 + Math.min(speed * 1.5, 45) + Math.abs(lateralVelocity) * 2.5;
+        this.engineOsc.frequency.setTargetAtTime(targetFreq, now, 0.08);
+
+        const filterFreq = 160 + Math.abs(lateralVelocity) * 18;
+        this.engineFilter.frequency.setTargetAtTime(filterFreq, now, 0.08);
+      }
+
+      updateGravityPullAudio(closestDist) {
+        if (!this.ctx || !this.enabled || !this.gravityGain) return;
+        const now = this.ctx.currentTime;
+        if (closestDist < 7.0) {
+          const intensity = Math.max(0, 1 - closestDist / 7.0);
+          this.gravityGain.gain.setTargetAtTime(intensity * 0.22, now, 0.06);
+          this.gravityOsc.frequency.setTargetAtTime(38 + intensity * 40, now, 0.06);
+        } else {
+          this.gravityGain.gain.setTargetAtTime(0.0, now, 0.1);
+        }
+      }
+
+      setShieldHum(active, energyRatio) {
+        if (!this.ctx || !this.enabled || !this.shieldGain) return;
         const now = this.ctx.currentTime;
         if (active && energyRatio > 0) {
           this.shieldGain.gain.setTargetAtTime(0.12, now, 0.05);
-          this.shieldOsc.frequency.setTargetAtTime(240 + (1 - energyRatio) * 160, now, 0.05);
+          this.shieldOsc.frequency.setTargetAtTime(260 + (1 - energyRatio) * 180, now, 0.05);
         } else {
           this.shieldGain.gain.setTargetAtTime(0.0, now, 0.08);
         }
+      }
+
+      playShieldDepleted() {
+        if (!this.ctx || !this.enabled) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.setValueAtTime(110, now + 0.08);
+
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+        osc.connect(gain);
+        gain.connect(this.sfxGain);
+        osc.start(now);
+        osc.stop(now + 0.22);
       }
 
       playNearMiss() {
@@ -662,29 +1070,34 @@
         const gain = this.ctx.createGain();
         osc.type = 'sine';
         osc.frequency.setValueAtTime(587.33, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.15);
+        osc.frequency.exponentialRampToValueAtTime(1046.5, now + 0.16);
+
         gain.gain.setValueAtTime(0.2, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.sfxGain);
         osc.start(now);
         osc.stop(now + 0.35);
       }
 
-      playSurge() {
+      playStepChime() {
         if (!this.ctx || !this.enabled) return;
         const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.exponentialRampToValueAtTime(440, now + 0.25);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(880, now + 0.2);
+
         gain.gain.setValueAtTime(0.18, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.sfxGain);
         osc.start(now);
-        osc.stop(now + 0.5);
+        osc.stop(now + 0.38);
       }
 
       playExplosion() {
@@ -693,9 +1106,8 @@
         const bufferSize = this.ctx.sampleRate * 0.8;
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const data = buffer.getChannelData(0);
-        for (let i = 0; i < bufferSize; i++) {
-          data[i] = Math.random() * 2 - 1;
-        }
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
         const noise = this.ctx.createBufferSource();
         noise.buffer = buffer;
 
@@ -710,21 +1122,31 @@
 
         noise.connect(filter);
         filter.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.sfxGain);
         noise.start(now);
       }
 
       toggleAudio() {
         this.enabled = !this.enabled;
-        if (this.ctx) {
-          if (!this.enabled) {
-            this.engineGain.gain.setValueAtTime(0, this.ctx.currentTime);
-            this.shieldGain.gain.setValueAtTime(0, this.ctx.currentTime);
-          } else {
-            this.engineGain.gain.setValueAtTime(0.04, this.ctx.currentTime);
-          }
+        if (this.ctx && this.masterGain) {
+          this.masterGain.gain.setValueAtTime(this.enabled ? this.masterVolume : 0, this.ctx.currentTime);
         }
         return this.enabled;
+      }
+
+      setMasterVolume(val) {
+        this.masterVolume = val;
+        if (this.ctx && this.masterGain) {
+          this.masterGain.gain.setValueAtTime(this.enabled ? val : 0, this.ctx.currentTime);
+        }
+      }
+      setMusicVolume(val) {
+        this.musicVolume = val;
+        if (this.ctx && this.musicGain) this.musicGain.gain.setValueAtTime(val, this.ctx.currentTime);
+      }
+      setSfxVolume(val) {
+        this.sfxVolume = val;
+        if (this.ctx && this.sfxGain) this.sfxGain.gain.setValueAtTime(val, this.ctx.currentTime);
       }
     }
 
@@ -760,7 +1182,14 @@
       spawnTimer: 0,
       spawnInterval: 2.2,
       lastSurgeTime: 0,
-      highScore: parseInt(localStorage.getItem('antigravity_high_score') || '0', 10)
+      highScore: parseInt(localStorage.getItem('antigravity_high_score') || '0', 10),
+      isTutorial: false,
+      tutorialStep: 1,
+      tutorialProgress: 0,
+      steerL: false,
+      steerR: false,
+      shieldTime: 0,
+      targetsDestroyed: 0
     };
 
     const container = document.getElementById('canvas-container');
@@ -775,7 +1204,7 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
     const ambientLight = new THREE.AmbientLight(0x1e293b, 1.2);
@@ -826,6 +1255,7 @@
     gridHelper.material.opacity = 0.35;
     scene.add(gridHelper);
 
+    // Ship Group
     const shipGroup = new THREE.Group();
 
     const fuselageGeom = new THREE.ConeGeometry(0.55, 2.2, 5);
@@ -885,24 +1315,23 @@
     leftWing.scale.x = -1;
     shipGroup.add(leftWing);
 
-    const wingtipGeom = new THREE.BoxGeometry(0.08, 0.08, 1.1);
-    const wingtipMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
-    const rWingtip = new THREE.Mesh(wingtipGeom, wingtipMat);
-    rWingtip.position.set(1.75, 0.05, 0.2);
-    shipGroup.add(rWingtip);
-
-    const lWingtip = new THREE.Mesh(wingtipGeom, wingtipMat);
-    lWingtip.position.set(-1.75, 0.05, 0.2);
-    shipGroup.add(lWingtip);
+    // Blaster cannons
+    const blasterGeom = new THREE.CylinderGeometry(0.06, 0.08, 0.7, 8);
+    blasterGeom.rotateX(Math.PI / 2);
+    const blasterMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, emissive: 0x0ea5e9, emissiveIntensity: 0.6 });
+    const rBlaster = new THREE.Mesh(blasterGeom, blasterMat);
+    rBlaster.position.set(1.4, 0, -0.2);
+    shipGroup.add(rBlaster);
+    const lBlaster = new THREE.Mesh(blasterGeom, blasterMat);
+    lBlaster.position.set(-1.4, 0, -0.2);
+    shipGroup.add(lBlaster);
 
     const thrusterGeom = new THREE.CylinderGeometry(0.14, 0.2, 0.45, 12);
     thrusterGeom.rotateX(Math.PI / 2);
     const thrusterMat = new THREE.MeshBasicMaterial({ color: 0x0284c7 });
-
     const rThruster = new THREE.Mesh(thrusterGeom, thrusterMat);
     rThruster.position.set(0.35, 0, 1.05);
     shipGroup.add(rThruster);
-
     const lThruster = new THREE.Mesh(thrusterGeom, thrusterMat);
     lThruster.position.set(-0.35, 0, 1.05);
     shipGroup.add(lThruster);
@@ -911,11 +1340,9 @@
     plumeGeom.rotateX(-Math.PI / 2);
     plumeGeom.translate(0, 0, 0.45);
     const plumeMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.85 });
-
     const rPlume = new THREE.Mesh(plumeGeom, plumeMat);
     rPlume.position.set(0.35, 0, 1.25);
     shipGroup.add(rPlume);
-
     const lPlume = new THREE.Mesh(plumeGeom, plumeMat);
     lPlume.position.set(-0.35, 0, 1.25);
     shipGroup.add(lPlume);
@@ -949,31 +1376,141 @@
     const gravVelocity = new THREE.Vector3(0, 0, 0);
     let lateralVelocity = 0;
 
+    // Laser & Debris Arrays
+    const activeLasers = [];
+    const activeExplosions = [];
     const gravityWells = [];
 
-    function createStandardWell(x, z) {
+    const laserGeom = new THREE.CylinderGeometry(0.06, 0.06, 1.4, 8);
+    laserGeom.rotateX(Math.PI / 2);
+    const laserMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, blending: THREE.AdditiveBlending });
+
+    function fireLasers() {
+      if (!state.running) return;
+      sound.playLaserShot();
+
+      const edge = document.getElementById('edge-flash');
+      edge.className = 'laser';
+      setTimeout(() => { if (edge.className === 'laser') edge.className = ''; }, 70);
+
+      [-1.4, 1.4].forEach(xOff => {
+        const mesh = new THREE.Mesh(laserGeom, laserMat);
+        mesh.position.set(shipGroup.position.x + xOff, shipGroup.position.y, shipGroup.position.z - 0.8);
+        scene.add(mesh);
+        activeLasers.push({
+          mesh,
+          velocity: new THREE.Vector3(0, 0, -48.0),
+          life: 0
+        });
+      });
+    }
+
+    function createExplosion(pos, colorHex) {
+      const pCount = 50;
+      const geom = new THREE.BufferGeometry();
+      const positions = new Float32Array(pCount * 3);
+      const velocities = new Float32Array(pCount * 3);
+
+      for (let i = 0; i < pCount; i++) {
+        positions[i * 3] = pos.x;
+        positions[i * 3 + 1] = pos.y;
+        positions[i * 3 + 2] = pos.z;
+
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        const speed = 4.0 + Math.random() * 8.0;
+
+        velocities[i * 3] = Math.sin(phi) * Math.cos(theta) * speed;
+        velocities[i * 3 + 1] = Math.cos(phi) * speed * 0.4;
+        velocities[i * 3 + 2] = Math.sin(phi) * Math.sin(theta) * speed;
+      }
+
+      geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const mat = new THREE.PointsMaterial({
+        size: 0.28,
+        color: colorHex || 0x38bdf8,
+        transparent: true,
+        opacity: 1.0,
+        blending: THREE.AdditiveBlending
+      });
+      const points = new THREE.Points(geom, mat);
+      scene.add(points);
+
+      activeExplosions.push({ points, velocities, life: 0, maxLife: 0.6 });
+    }
+
+    function createWell(type, x, z) {
       const group = new THREE.Group();
       group.position.set(x, 0, z);
 
-      const coreGeom = new THREE.SphereGeometry(1.0, 24, 24);
-      const coreMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+      if (type === 'binary') {
+        const orbitRadius = 1.6;
+        const core1Geom = new THREE.SphereGeometry(0.85, 20, 20);
+        const core1Mat = new THREE.MeshBasicMaterial({ color: 0x050505 });
+        const core1 = new THREE.Mesh(core1Geom, core1Mat);
+        core1.position.x = orbitRadius;
+        group.add(core1);
+
+        const core2Geom = new THREE.SphereGeometry(0.85, 20, 20);
+        const core2Mat = new THREE.MeshBasicMaterial({ color: 0x050505 });
+        const core2 = new THREE.Mesh(core2Geom, core2Mat);
+        core2.position.x = -orbitRadius;
+        group.add(core2);
+
+        const diskGeom = new THREE.RingGeometry(0.8, 3.8, 36);
+        diskGeom.rotateX(-Math.PI / 2);
+        const diskMat = new THREE.MeshBasicMaterial({
+          color: 0xec4899,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.6,
+          blending: THREE.AdditiveBlending
+        });
+        const disk = new THREE.Mesh(diskGeom, diskMat);
+        group.add(disk);
+
+        scene.add(group);
+        return {
+          type: 'binary',
+          group,
+          core1,
+          core2,
+          disk,
+          orbitRadius,
+          orbitAngle: 0,
+          mass: 1.5,
+          health: 5,
+          passed: false,
+          nearMissTriggered: false,
+          rotationSpeed: 3.0
+        };
+      }
+
+      const coreRadius = type === 'tutorial_target' ? 1.2 : 1.0;
+      const coreGeom = new THREE.SphereGeometry(coreRadius, 24, 24);
+      const coreColor = type === 'tutorial_target' ? 0x064e3b : 0x000000;
+      const coreMat = new THREE.MeshBasicMaterial({ color: coreColor });
       const core = new THREE.Mesh(coreGeom, coreMat);
       group.add(core);
 
-      const rimGeom = new THREE.RingGeometry(0.98, 1.08, 32);
+      const rimGeom = new THREE.RingGeometry(coreRadius - 0.02, coreRadius + 0.08, 32);
       rimGeom.rotateX(-Math.PI / 2);
       const rimMat = new THREE.MeshBasicMaterial({
-        color: 0xf43f5e,
+        color: type === 'tutorial_target' ? 0x10b981 : 0xf43f5e,
         side: THREE.DoubleSide,
         blending: THREE.AdditiveBlending
       });
       const rim = new THREE.Mesh(rimGeom, rimMat);
       group.add(rim);
 
-      const diskGeom = new THREE.RingGeometry(1.15, 3.4, 36);
+      let diskColor = 0x818cf8;
+      if (type === 'pulsing') diskColor = 0xf59e0b;
+      if (type === 'tutorial_target') diskColor = 0x34d399;
+
+      const diskGeom = new THREE.RingGeometry(coreRadius + 0.15, coreRadius + 2.4, 36);
       diskGeom.rotateX(-Math.PI / 2);
       const diskMat = new THREE.MeshBasicMaterial({
-        color: 0x818cf8,
+        color: diskColor,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.65,
@@ -982,114 +1519,29 @@
       const disk = new THREE.Mesh(diskGeom, diskMat);
       group.add(disk);
 
-      const pCount = 90;
-      const pGeom = new THREE.BufferGeometry();
-      const pPos = new Float32Array(pCount * 3);
-      for (let i = 0; i < pCount; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const rad = 1.2 + Math.random() * 2.8;
-        pPos[i * 3] = Math.cos(angle) * rad;
-        pPos[i * 3 + 1] = (Math.random() - 0.5) * 0.4;
-        pPos[i * 3 + 2] = Math.sin(angle) * rad;
-      }
-      pGeom.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-      const pMat = new THREE.PointsMaterial({
-        size: 0.2,
-        color: 0x38bdf8,
-        transparent: true,
-        opacity: 0.8,
-        blending: THREE.AdditiveBlending
-      });
-      const particles = new THREE.Points(pGeom, pMat);
-      group.add(particles);
-
       scene.add(group);
-
       return {
-        type: 'standard',
+        type,
         group,
         disk,
-        particles,
-        mass: 1.0,
-        coreRadius: 1.0,
+        mass: type === 'tutorial_target' ? 0.7 : 1.0,
+        health: type === 'pulsing' ? 4 : (type === 'tutorial_target' ? 2 : 3),
+        pulsePhase: Math.random() * Math.PI * 2,
+        pulseSpeed: 4.0,
         passed: false,
         nearMissTriggered: false,
         rotationSpeed: 2.2 + Math.random() * 1.5
       };
     }
 
-    function createPulsingWell(x, z) {
-      const well = createStandardWell(x, z);
-      well.type = 'pulsing';
-      well.pulsePhase = Math.random() * Math.PI * 2;
-      well.pulseSpeed = 4.0;
-      well.disk.material.color.setHex(0xf59e0b);
-      return well;
-    }
-
-    function createBinaryWell(x, z) {
-      const group = new THREE.Group();
-      group.position.set(x, 0, z);
-
-      const orbitRadius = 1.6;
-      const core1Geom = new THREE.SphereGeometry(0.85, 20, 20);
-      const core1Mat = new THREE.MeshBasicMaterial({ color: 0x050505 });
-      const core1 = new THREE.Mesh(core1Geom, core1Mat);
-      core1.position.x = orbitRadius;
-      group.add(core1);
-
-      const core2Geom = new THREE.SphereGeometry(0.85, 20, 20);
-      const core2Mat = new THREE.MeshBasicMaterial({ color: 0x050505 });
-      const core2 = new THREE.Mesh(core2Geom, core2Mat);
-      core2.position.x = -orbitRadius;
-      group.add(core2);
-
-      const diskGeom = new THREE.RingGeometry(0.8, 3.8, 36);
-      diskGeom.rotateX(-Math.PI / 2);
-      const diskMat = new THREE.MeshBasicMaterial({
-        color: 0xec4899,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending
-      });
-      const disk = new THREE.Mesh(diskGeom, diskMat);
-      group.add(disk);
-
-      scene.add(group);
-
-      return {
-        type: 'binary',
-        group,
-        core1,
-        core2,
-        disk,
-        orbitRadius,
-        orbitAngle: 0,
-        mass: 1.5,
-        coreRadius: 1.0,
-        passed: false,
-        nearMissTriggered: false,
-        rotationSpeed: 3.0
-      };
-    }
-
     function spawnWell() {
       const spawnZ = -55.0;
       const spawnX = (Math.random() - 0.5) * 14.0;
+      let type = 'standard';
+      if (state.score >= 50 && Math.random() < 0.4) type = 'binary';
+      else if (state.score >= 10 && Math.random() < 0.45) type = 'pulsing';
 
-      let well;
-      if (state.score >= 50 && Math.random() < 0.4) {
-        well = createBinaryWell(spawnX, spawnZ);
-      } else if (state.score >= 25 && Math.random() < 0.45) {
-        well = createPulsingWell(spawnX, spawnZ);
-      } else if (state.score >= 10 && Math.random() < 0.35) {
-        well = createPulsingWell(spawnX, spawnZ);
-      } else {
-        well = createStandardWell(spawnX, spawnZ);
-      }
-
-      gravityWells.push(well);
+      gravityWells.push(createWell(type, spawnX, spawnZ));
     }
 
     const raycaster = new THREE.Raycaster();
@@ -1105,13 +1557,34 @@
       if (raycaster.ray.intersectPlane(planeY0, planeIntersectPoint)) {
         shipTargetPos.x = THREE.MathUtils.clamp(planeIntersectPoint.x, CONFIG.bounds.minX, CONFIG.bounds.maxX);
         shipTargetPos.z = THREE.MathUtils.clamp(planeIntersectPoint.z, CONFIG.bounds.minZ, CONFIG.bounds.maxZ);
+
+        if (state.isTutorial && state.tutorialStep === 1) {
+          if (shipTargetPos.x < -3.0) state.steerL = true;
+          if (shipTargetPos.x > 3.0) state.steerR = true;
+          let p = (state.steerL ? 50 : 0) + (state.steerR ? 50 : 0);
+          document.getElementById('tut-progress-bar').style.width = p + '%';
+          if (p >= 100) {
+            advanceTutorial(2, "Step 2 / 4: Gravity Well Evasion", "A gravitational well is approaching. Avoid its fatal event horizon (radius 1.0) to gain near-miss bonuses!");
+            gravityWells.push(createWell('standard', 0, -45.0));
+          }
+        }
       }
+    }
+
+    function advanceTutorial(step, tag, desc) {
+      sound.playStepChime();
+      state.tutorialStep = step;
+      document.getElementById('tut-step-tag').textContent = tag;
+      document.getElementById('tut-desc-text').textContent = desc;
+      document.getElementById('tut-progress-bar').style.width = '0%';
     }
 
     window.addEventListener('mousemove', (e) => {
       if (state.running) updateShipTarget(e.clientX, e.clientY);
     });
-
+    window.addEventListener('mousedown', (e) => {
+      if (state.running && e.button === 0) fireLasers();
+    });
     window.addEventListener('touchmove', (e) => {
       if (state.running && e.touches.length > 0) {
         updateShipTarget(e.touches[0].clientX, e.touches[0].clientY);
@@ -1120,59 +1593,185 @@
 
     window.addEventListener('keydown', (e) => {
       if (e.code === 'Space') {
-        if (!state.shieldDepleted && state.shieldEnergy > 0) {
-          state.shieldActive = true;
-        }
+        if (!state.shieldDepleted && state.shieldEnergy > 0) state.shieldActive = true;
       }
+      if (e.code === 'KeyF' || e.code === 'KeyZ') fireLasers();
+      if (e.code === 'KeyV' && !e.repeat) toggleVoiceComms();
       if (e.code === 'KeyM') {
-        const enabled = sound.toggleAudio();
-        document.getElementById('audio-icon').textContent = enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+        sound.toggleAudio();
       }
     });
-
     window.addEventListener('keyup', (e) => {
-      if (e.code === 'Space') {
+      if (e.code === 'Space') state.shieldActive = false;
+    });
+
+    // Voice Commands System (Hands-free Pollux Copilot)
+    let isVoiceActive = false;
+    let voiceRecognition = null;
+    const voiceBtn = document.getElementById('voice-comms-toggle');
+    const voiceLabel = document.getElementById('voice-btn-label');
+    const voiceBanner = document.getElementById('voice-banner');
+    const voiceText = document.getElementById('voice-text');
+    const voiceBadge = document.getElementById('voice-badge');
+
+    function speakPollux(text, badge = 'POLLUX') {
+      voiceBadge.textContent = badge;
+      voiceText.textContent = `"${text}"`;
+      voiceBanner.style.display = 'block';
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.pitch = 1.06;
+        u.rate = 1.08;
+        window.speechSynthesis.speak(u);
+      }
+      setTimeout(() => {
+        if (voiceText.textContent.includes(text)) {
+          voiceBanner.style.display = isVoiceActive ? 'block' : 'none';
+          voiceText.textContent = 'Listening for voice commands...';
+        }
+      }, 7000);
+    }
+
+    function initVoiceComms() {
+      const SpeechClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechClass) {
+        alert("Speech recognition is not supported in this browser.");
+        return;
+      }
+      voiceRecognition = new SpeechClass();
+      voiceRecognition.continuous = true;
+      voiceRecognition.interimResults = false;
+      voiceRecognition.lang = 'en-US';
+
+      voiceRecognition.onstart = () => {
+        isVoiceActive = true;
+        voiceBtn.style.borderColor = '#38bdf8';
+        voiceBtn.style.background = 'rgba(56, 189, 248, 0.2)';
+        voiceLabel.textContent = '🎙️ VOICE: ON [V]';
+        voiceBanner.style.display = 'block';
+        voiceBadge.textContent = 'POLLUX COMMS';
+        voiceText.textContent = 'Voice link online. Say "Fire", "Shield", "Status report", or "Relaunch"';
+      };
+
+      voiceRecognition.onresult = (e) => {
+        const last = e.results[e.results.length - 1];
+        if (last.isFinal) {
+          const phrase = last[0].transcript.toLowerCase().trim();
+          handleVoiceCommand(phrase);
+        }
+      };
+
+      voiceRecognition.onend = () => {
+        if (isVoiceActive) {
+          setTimeout(() => {
+            if (isVoiceActive) try { voiceRecognition.start(); } catch(err) {}
+          }, 400);
+        } else {
+          voiceLabel.textContent = '🎙️ Voice [V]';
+          voiceBtn.style.borderColor = '';
+          voiceBtn.style.background = '';
+          voiceBanner.style.display = 'none';
+        }
+      };
+    }
+
+    function toggleVoiceComms() {
+      if (!voiceRecognition) initVoiceComms();
+      if (!voiceRecognition) return;
+      if (isVoiceActive) {
+        isVoiceActive = false;
+        try { voiceRecognition.stop(); } catch(e) {}
+        voiceLabel.textContent = '🎙️ Voice [V]';
+        voiceBtn.style.borderColor = '';
+        voiceBtn.style.background = '';
+        voiceBanner.style.display = 'none';
+      } else {
+        try { voiceRecognition.start(); } catch(e) {}
+      }
+    }
+
+    function handleVoiceCommand(phrase) {
+      if (phrase.includes('fire') || phrase.includes('shoot') || phrase.includes('laser') || phrase.includes('blaster')) {
+        fireLasers();
+        speakPollux("Plasma cannons discharged!", "💥 FIRE");
+        return;
+      }
+      if (phrase.includes('shield up') || phrase.includes('activate shield') || phrase.includes('repel') || phrase === 'shield') {
+        if (!state.shieldDepleted && state.shieldEnergy > 0) state.shieldActive = true;
+        speakPollux("Repulsion shield engaged!", "🛡️ SHIELD");
+        return;
+      }
+      if (phrase.includes('shield down') || phrase.includes('drop shield')) {
         state.shieldActive = false;
+        speakPollux("Shield dropped.", "🛡️ SHIELD");
+        return;
       }
+      if (phrase.includes('status') || phrase.includes('report') || phrase.includes('diagnostic')) {
+        const pct = Math.round(state.shieldEnergy * 100);
+        speakPollux(`Status nominal, Commander. Shields at ${pct} percent. Distance ${state.distance.toFixed(1)} AU. Wells evaded: ${state.score}.`, "📊 STATUS");
+        return;
+      }
+      if (phrase.includes('restart') || phrase.includes('relaunch') || phrase.includes('try again') || phrase.includes('play again')) {
+        restart(false);
+        speakPollux("Relaunching starcraft. Trajectory locked!", "🚀 RELAUNCH");
+        return;
+      }
+      if (phrase.includes('mute') || phrase.includes('sound')) {
+        sound.toggleAudio();
+        speakPollux("Audio toggled.", "🔊 AUDIO");
+        return;
+      }
+      speakPollux("Pollux here, Commander! Systems operational. Maintain lateral clearance from well vortexes.", "🤖 POLLUX");
+    }
+
+    voiceBtn.addEventListener('click', toggleVoiceComms);
+
+    // Mobile buttons
+    const fireBtn = document.getElementById('mobile-fire-btn');
+    fireBtn.addEventListener('touchstart', (e) => { e.preventDefault(); fireLasers(); });
+
+    const shieldBtn = document.getElementById('mobile-shield-btn');
+    shieldBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (!state.shieldDepleted && state.shieldEnergy > 0) state.shieldActive = true;
+    });
+    shieldBtn.addEventListener('touchend', (e) => { e.preventDefault(); state.shieldActive = false; });
+
+    // Audio Modal UI Controls
+    document.getElementById('audio-settings-toggle').addEventListener('click', () => {
+      const modal = document.getElementById('audio-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    });
+    document.getElementById('audio-close-btn').addEventListener('click', () => {
+      document.getElementById('audio-modal').style.display = 'none';
     });
 
-    const mobileShieldBtn = document.getElementById('mobile-shield-btn');
-    const startShieldTouch = (e) => {
-      e.preventDefault();
-      if (!state.shieldDepleted && state.shieldEnergy > 0) {
-        state.shieldActive = true;
-        mobileShieldBtn.classList.add('active');
-      }
-    };
-    const endShieldTouch = (e) => {
-      e.preventDefault();
-      state.shieldActive = false;
-      mobileShieldBtn.classList.remove('active');
-    };
-    mobileShieldBtn.addEventListener('touchstart', startShieldTouch, { passive: false });
-    mobileShieldBtn.addEventListener('touchend', endShieldTouch);
-    mobileShieldBtn.addEventListener('touchcancel', endShieldTouch);
-
-    document.getElementById('audio-toggle-btn').addEventListener('click', () => {
-      sound.init();
-      const enabled = sound.toggleAudio();
-      document.getElementById('audio-icon').textContent = enabled ? '🔊 Sound ON' : '🔇 Sound OFF';
+    document.getElementById('slider-master').addEventListener('input', (e) => {
+      const v = parseFloat(e.target.value);
+      sound.setMasterVolume(v);
+      document.getElementById('txt-master-vol').textContent = Math.round(v * 100) + '%';
+    });
+    document.getElementById('slider-music').addEventListener('input', (e) => {
+      const v = parseFloat(e.target.value);
+      sound.setMusicVolume(v);
+      document.getElementById('txt-music-vol').textContent = Math.round(v * 100) + '%';
+    });
+    document.getElementById('slider-sfx').addEventListener('input', (e) => {
+      const v = parseFloat(e.target.value);
+      sound.setSfxVolume(v);
+      document.getElementById('txt-sfx-vol').textContent = Math.round(v * 100) + '%';
+    });
+    document.getElementById('btn-toggle-mute').addEventListener('click', () => {
+      sound.toggleAudio();
     });
 
+    // Camera shake
     let cameraShakeIntensity = 0;
     const originalCameraPos = new THREE.Vector3(0, 7.5, 11);
 
     function triggerCameraShake(amount) {
       cameraShakeIntensity = Math.min(cameraShakeIntensity + amount, 0.85);
-    }
-
-    function showSurgeBanner(text) {
-      const banner = document.createElement('div');
-      banner.className = 'surge-banner';
-      banner.textContent = text;
-      document.getElementById('banner-container').appendChild(banner);
-      setTimeout(() => banner.remove(), 3200);
-      sound.playSurge();
     }
 
     function showNearMissPop() {
@@ -1184,19 +1783,17 @@
 
       const edge = document.getElementById('edge-flash');
       edge.className = 'near-miss';
-      setTimeout(() => {
-        edge.className = '';
-      }, 200);
+      setTimeout(() => { edge.className = ''; }, 200);
 
       sound.playNearMiss();
       triggerCameraShake(0.25);
     }
 
+    // Main animation loop
     const clock = new THREE.Clock();
 
     function animate() {
       requestAnimationFrame(animate);
-
       const delta = Math.min(clock.getDelta(), 0.1);
 
       if (!state.running) {
@@ -1210,25 +1807,40 @@
       state.gameTime += delta;
       state.distance += (state.scrollSpeed * delta) / 100;
 
-      if (state.gameTime - state.lastSurgeTime >= CONFIG.difficultyInterval) {
+      // Difficulty curve
+      if (!state.isTutorial && state.gameTime - state.lastSurgeTime >= CONFIG.difficultyInterval) {
         state.lastSurgeTime = state.gameTime;
         state.difficultyTier += 1;
         state.gravityG *= 1.10;
         state.scrollSpeed *= 1.05;
         state.spawnInterval = Math.max(1.1, state.spawnInterval * 0.92);
 
-        let surgeMsg = `GRAVITATIONAL SURGE // TIER ${state.difficultyTier}`;
-        if (state.score >= 50) surgeMsg += ' • BINARY VORTEXES ACTIVE';
-        else if (state.score >= 10) surgeMsg += ' • PULSING CORES ACTIVE';
-        showSurgeBanner(surgeMsg);
+        const banner = document.createElement('div');
+        banner.className = 'surge-banner';
+        banner.textContent = `GRAVITATIONAL SURGE // TIER ${state.difficultyTier}`;
+        document.getElementById('banner-container').appendChild(banner);
+        setTimeout(() => banner.remove(), 3000);
       }
 
+      // Shield logic
       if (state.shieldActive) {
         state.shieldEnergy = Math.max(0, state.shieldEnergy - CONFIG.shieldDrainRate * delta);
         if (state.shieldEnergy <= 0) {
           state.shieldActive = false;
           state.shieldDepleted = true;
           document.getElementById('shield-bar').classList.add('shield-depleted');
+          sound.playShieldDepleted();
+        }
+
+        if (state.isTutorial && state.tutorialStep === 3) {
+          state.shieldTime += delta;
+          const prog = Math.min(100, Math.round((state.shieldTime / 2.0) * 100));
+          document.getElementById('tut-progress-bar').style.width = prog + '%';
+          if (prog >= 100) {
+            advanceTutorial(4, "Step 4 / 4: Plasma Blasters", "Click Left Mouse or press F to shoot plasma lasers and destroy the incoming target planet cores!");
+            gravityWells.push(createWell('tutorial_target', -3.5, -45.0));
+            gravityWells.push(createWell('tutorial_target', 3.5, -55.0));
+          }
         }
       } else {
         if (state.shieldEnergy < 1.0) {
@@ -1240,7 +1852,7 @@
         }
       }
 
-      sound.setShieldState(state.shieldActive, state.shieldEnergy);
+      sound.setShieldHum(state.shieldActive, state.shieldEnergy);
 
       if (state.shieldActive) {
         shieldSphere.material.opacity = 0.45 + Math.sin(clock.getElapsedTime() * 15.0) * 0.15;
@@ -1249,11 +1861,10 @@
       } else {
         shieldSphere.material.opacity = 0.0;
         shieldAura.material.opacity = 0.0;
-        if (document.getElementById('edge-flash').className === 'shield') {
-          document.getElementById('edge-flash').className = '';
-        }
+        if (document.getElementById('edge-flash').className === 'shield') document.getElementById('edge-flash').className = '';
       }
 
+      // Ship lateral lerp & banking
       const prevX = shipGroup.position.x;
       shipGroup.position.x = THREE.MathUtils.lerp(shipGroup.position.x, shipTargetPos.x, CONFIG.lerpSpeed * delta);
       shipGroup.position.z = THREE.MathUtils.lerp(shipGroup.position.z, shipTargetPos.z, CONFIG.lerpSpeed * delta);
@@ -1262,37 +1873,103 @@
       const targetRoll = -THREE.MathUtils.clamp(lateralVelocity * 0.08, -0.65, 0.65);
       shipGroup.rotation.z = THREE.MathUtils.lerp(shipGroup.rotation.z, targetRoll, 10.0 * delta);
 
+      sound.updateShipAudio(state.scrollSpeed, lateralVelocity);
+
       const thrustScale = 1.0 + Math.random() * 0.25;
       rPlume.scale.set(thrustScale, thrustScale, thrustScale);
       lPlume.scale.set(thrustScale, thrustScale, thrustScale);
 
-      state.spawnTimer += delta;
-      if (state.spawnTimer >= state.spawnInterval) {
-        state.spawnTimer = 0;
-        spawnWell();
-      }
-
+      // Starfield & grid
       starField.position.z += state.scrollSpeed * delta * 0.4;
       if (starField.position.z > 50) starField.position.z = 0;
 
       gridHelper.position.z += state.scrollSpeed * delta;
       if (gridHelper.position.z > 2) gridHelper.position.z -= 2;
 
+      if (!state.isTutorial) {
+        state.spawnTimer += delta;
+        if (state.spawnTimer >= state.spawnInterval) {
+          state.spawnTimer = 0;
+          spawnWell();
+        }
+      }
+
+      // Update lasers
+      for (let i = activeLasers.length - 1; i >= 0; i--) {
+        const laser = activeLasers[i];
+        laser.mesh.position.addScaledVector(laser.velocity, delta);
+        laser.life += delta;
+
+        let hit = false;
+        for (let j = gravityWells.length - 1; j >= 0; j--) {
+          const well = gravityWells[j];
+          const distToLaser = laser.mesh.position.distanceTo(well.group.position);
+          if (distToLaser <= 2.2) {
+            hit = true;
+            well.health -= 1;
+            sound.playLaserShot();
+
+            if (well.health <= 0) {
+              sound.playPlanetExplosion();
+              createExplosion(well.group.position, well.disk.material.color.getHex());
+              state.score += 5;
+              triggerCameraShake(0.35);
+
+              if (state.isTutorial && state.tutorialStep === 4) {
+                state.targetsDestroyed += 1;
+                const p = Math.min(100, state.targetsDestroyed * 50);
+                document.getElementById('tut-progress-bar').style.width = p + '%';
+                if (state.targetsDestroyed >= 2) {
+                  advanceTutorial(5, "Flight Certified!", "Outstanding! You have mastered all flight controls, repulsion fields, and plasma weaponry. Ready for deep space!");
+                  setTimeout(() => { resetAndStart(false); }, 3000);
+                }
+              }
+
+              scene.remove(well.group);
+              gravityWells.splice(j, 1);
+            }
+            break;
+          }
+        }
+
+        if (hit || laser.life > 1.2 || laser.mesh.position.z < -65) {
+          scene.remove(laser.mesh);
+          activeLasers.splice(i, 1);
+        }
+      }
+
+      // Update explosions
+      for (let i = activeExplosions.length - 1; i >= 0; i--) {
+        const exp = activeExplosions[i];
+        exp.life += delta;
+        const positions = exp.points.geometry.attributes.position.array;
+        for (let j = 0; j < exp.velocities.length / 3; j++) {
+          positions[j * 3] += exp.velocities[j * 3] * delta;
+          positions[j * 3 + 1] += exp.velocities[j * 3 + 1] * delta;
+          positions[j * 3 + 2] += exp.velocities[j * 3 + 2] * delta;
+        }
+        exp.points.geometry.attributes.position.needsUpdate = true;
+        exp.points.material.opacity = 1 - (exp.life / exp.maxLife);
+
+        if (exp.life >= exp.maxLife) {
+          scene.remove(exp.points);
+          activeExplosions.splice(i, 1);
+        }
+      }
+
+      // Gravity calculations
       const totalGravForce = new THREE.Vector3(0, 0, 0);
+      let closestWellDist = 999.0;
 
       for (let i = gravityWells.length - 1; i >= 0; i--) {
         const well = gravityWells[i];
-
         well.group.position.z += state.scrollSpeed * delta;
         well.disk.rotation.z += well.rotationSpeed * delta;
-        if (well.particles) well.particles.rotation.y += well.rotationSpeed * 0.5 * delta;
 
         let effectiveMass = well.mass;
         if (well.type === 'pulsing') {
           well.pulsePhase += well.pulseSpeed * delta;
-          const pulse = (Math.sin(well.pulsePhase) + 1) * 0.5;
-          effectiveMass = well.mass * (0.6 + pulse * 1.0);
-          well.disk.scale.set(1.0 + pulse * 0.35, 1.0 + pulse * 0.35, 1);
+          effectiveMass = well.mass * (0.6 + (Math.sin(well.pulsePhase) + 1) * 0.5);
         } else if (well.type === 'binary') {
           well.orbitAngle += well.rotationSpeed * delta;
           well.core1.position.x = Math.cos(well.orbitAngle) * well.orbitRadius;
@@ -1304,23 +1981,21 @@
         const toShip = new THREE.Vector3().subVectors(shipGroup.position, well.group.position);
         toShip.y = 0;
         const dist = toShip.length();
+        if (dist < closestWellDist) closestWellDist = dist;
 
         if (state.shieldActive && dist <= CONFIG.shieldRepelRadius) {
           const repelDir = new THREE.Vector3().subVectors(well.group.position, shipGroup.position).normalize();
           repelDir.y = 0;
-          const repelStrength = (1 - dist / CONFIG.shieldRepelRadius) * CONFIG.shieldRepelForce;
-          well.group.position.addScaledVector(repelDir, repelStrength * delta);
+          well.group.position.addScaledVector(repelDir, (1 - dist / CONFIG.shieldRepelRadius) * CONFIG.shieldRepelForce * delta);
         } else {
           if (dist > 0.05) {
-            let forceMag = (state.gravityG * effectiveMass) / (dist * dist);
-            forceMag = Math.min(forceMag, CONFIG.maxGravityForce);
-
+            let forceMag = Math.min((state.gravityG * effectiveMass) / (dist * dist), CONFIG.maxGravityForce);
             const pullDir = new THREE.Vector3().subVectors(well.group.position, shipGroup.position).normalize();
             totalGravForce.addScaledVector(pullDir, forceMag);
           }
         }
 
-        if (dist <= CONFIG.collisionRadius) {
+        if (dist <= CONFIG.collisionRadius && !state.isTutorial) {
           triggerGameOver();
           return;
         }
@@ -1330,6 +2005,11 @@
           state.score += 1;
           state.nearMisses += 1;
           showNearMissPop();
+
+          if (state.isTutorial && state.tutorialStep === 2) {
+            advanceTutorial(3, "Step 3 / 4: Antigravity Shield", "Hold Spacebar (or touch Shield) to activate your repulsion field and repel nearby gravity wells!");
+            gravityWells.push(createWell('standard', 0.5, -35.0));
+          }
         }
 
         if (well.group.position.z > 12.0 && !well.passed) {
@@ -1337,8 +2017,15 @@
           state.score += 1;
           scene.remove(well.group);
           gravityWells.splice(i, 1);
+
+          if (state.isTutorial && state.tutorialStep === 2) {
+            advanceTutorial(3, "Step 3 / 4: Antigravity Shield", "Hold Spacebar (or touch Shield) to activate your repulsion field and repel nearby gravity wells!");
+            gravityWells.push(createWell('standard', 0.5, -35.0));
+          }
         }
       }
+
+      sound.updateGravityPullAudio(closestWellDist);
 
       gravVelocity.addScaledVector(totalGravForce, delta);
       gravVelocity.multiplyScalar(Math.exp(-2.5 * delta));
@@ -1388,11 +2075,13 @@
       }, 400);
     }
 
-    function resetAndStart() {
-      for (const well of gravityWells) {
-        scene.remove(well.group);
-      }
+    function resetAndStart(isTutorial = false) {
+      for (const well of gravityWells) scene.remove(well.group);
       gravityWells.length = 0;
+      for (const laser of activeLasers) scene.remove(laser.mesh);
+      activeLasers.length = 0;
+      for (const exp of activeExplosions) scene.remove(exp.points);
+      activeExplosions.length = 0;
 
       state.score = 0;
       state.distance = 0;
@@ -1402,11 +2091,18 @@
       state.shieldDepleted = false;
       state.gameTime = 0;
       state.difficultyTier = 1;
-      state.scrollSpeed = CONFIG.baseScrollSpeed;
-      state.gravityG = CONFIG.baseGravityG;
+      state.scrollSpeed = isTutorial ? 10.0 : CONFIG.baseScrollSpeed;
+      state.gravityG = isTutorial ? 20.0 : CONFIG.baseGravityG;
       state.spawnTimer = 0;
       state.spawnInterval = 2.2;
       state.lastSurgeTime = 0;
+
+      state.isTutorial = isTutorial;
+      state.tutorialStep = 1;
+      state.steerL = false;
+      state.steerR = false;
+      state.shieldTime = 0;
+      state.targetsDestroyed = 0;
 
       shipGroup.position.set(0, 0, 3);
       shipTargetPos.set(0, 0, 3);
@@ -1418,13 +2114,24 @@
       document.getElementById('game-over-modal').style.display = 'none';
       document.getElementById('start-screen').style.display = 'none';
 
+      const tutOverlay = document.getElementById('tutorial-overlay');
+      if (isTutorial) {
+        tutOverlay.style.display = 'block';
+        advanceTutorial(1, "Step 1 / 4: Steering & Banking", "Move your cursor or touch drag left and right. Notice the aerodynamic lateral roll of your starcraft as it adjusts flight vectors.");
+      } else {
+        tutOverlay.style.display = 'none';
+      }
+
       sound.init();
       state.running = true;
       clock.start();
     }
 
-    document.getElementById('start-btn').addEventListener('click', resetAndStart);
-    document.getElementById('restart-btn').addEventListener('click', resetAndStart);
+    document.getElementById('start-btn').addEventListener('click', () => resetAndStart(false));
+    document.getElementById('start-tutorial-btn').addEventListener('click', () => resetAndStart(true));
+    document.getElementById('tut-skip-btn').addEventListener('click', () => resetAndStart(false));
+    document.getElementById('restart-btn').addEventListener('click', () => resetAndStart(false));
+    document.getElementById('gameover-tut-btn').addEventListener('click', () => resetAndStart(true));
 
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
