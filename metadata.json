@@ -1,0 +1,6 @@
+{
+  "name": "Antigravity — Multi-Cloud Planetary Ecosystem & 3D Flight",
+  "description": "Interactive Three.js Antigravity game and planetary multi-cloud infrastructure orchestration ecosystem.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
