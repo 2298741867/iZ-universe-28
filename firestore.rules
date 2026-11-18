@@ -1,0 +1,128 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global Hardened Primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isEmailVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // LeaderboardEntry Validation Blueprint
+    function isValidLeaderboardEntry(data) {
+      return data is map &&
+        data.keys().hasAll([
+          'userId',
+          'pilotName',
+          'score',
+          'distance',
+          'nearMisses',
+          'difficultyTier',
+          'isPublic',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'userId',
+          'pilotName',
+          'score',
+          'distance',
+          'nearMisses',
+          'difficultyTier',
+          'isPublic',
+          'createdAt',
+          'updatedAt'
+        ]) &&
+        data.userId is string &&
+        data.userId.size() >= 1 &&
+        data.userId.size() <= 128 &&
+        data.userId.matches('^[a-zA-Z0-9_\\-]+$') &&
+        data.userId == request.auth.uid &&
+        data.pilotName is string &&
+        data.pilotName.size() >= 1 &&
+        data.pilotName.size() <= 40 &&
+        data.score is int &&
+        data.score >= 0 &&
+        data.score <= 1000000 &&
+        data.distance is number &&
+        data.distance >= 0 &&
+        data.distance <= 1000000 &&
+        data.nearMisses is int &&
+        data.nearMisses >= 0 &&
+        data.nearMisses <= 100000 &&
+        data.difficultyTier is int &&
+        data.difficultyTier >= 1 &&
+        data.difficultyTier <= 1000 &&
+        data.isPublic is bool &&
+        data.isPublic == true &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    match /leaderboard/{entryId} {
+      // Single doc read checks isValidId and resource.data
+      allow get: if isValidId(entryId) && (
+        existing().isPublic == true ||
+        isOwner(existing().userId)
+      );
+
+      // List enforces resource.data evaluation (single-field index compatible) and bounded query limit
+      allow list: if (
+        existing().score >= 0 ||
+        isOwner(existing().userId)
+      ) &&
+        request.query.limit != null &&
+        request.query.limit <= 50;
+
+      // Create: Authenticated, email-verified owner with server timestamps and valid payload
+      allow create: if isEmailVerified() &&
+        isValidId(entryId) &&
+        isValidLeaderboardEntry(incoming()) &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+
+      // Update: Owner may update only pilotName and updatedAt; score/metrics/userId/createdAt remain immutable
+      allow update: if isEmailVerified() &&
+        isValidId(entryId) &&
+        isValidLeaderboardEntry(incoming()) &&
+        isOwner(existing().userId) &&
+        incoming().userId == existing().userId &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        incoming().score == existing().score &&
+        incoming().distance == existing().distance &&
+        incoming().nearMisses == existing().nearMisses &&
+        incoming().difficultyTier == existing().difficultyTier &&
+        incoming().isPublic == existing().isPublic &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['pilotName', 'updatedAt']);
+
+      // Delete: Authenticated verified owner only
+      allow delete: if isEmailVerified() &&
+        isValidId(entryId) &&
+        isOwner(existing().userId);
+    }
+  }
+}

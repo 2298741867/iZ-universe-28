@@ -120,7 +120,10 @@ app.get('/health', (_req, res) => {
 });
 
 async function startServer() {
-  const isProduction = process.env.NODE_ENV === 'production' || Boolean(process.env.K_SERVICE);
+  const isDev = process.env.NODE_ENV === 'development' || process.env.npm_lifecycle_event === 'dev';
+  const distPath = path.resolve(__dirname, 'dist');
+  const indexHtml = path.resolve(distPath, 'index.html');
+  const isProduction = !isDev && (process.env.NODE_ENV === 'production' || fs.existsSync(indexHtml));
 
   if (!isProduction) {
     const { createServer: createViteServer } = await import('vite');
@@ -130,8 +133,6 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = path.resolve(__dirname, 'dist');
-    const indexHtml = path.resolve(distPath, 'index.html');
     app.use(express.static(distPath));
     app.use(express.static(path.resolve(__dirname, 'public')));
     app.get('*', (_req, res) => {

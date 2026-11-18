@@ -7,13 +7,14 @@ import { AnomalySimulator } from './components/AnomalySimulator';
 import { StandaloneGameModal } from './components/StandaloneGameModal';
 import { PolluxCopilotModal } from './components/PolluxCopilotModal';
 import { GoogleDriveWorkspace } from './components/GoogleDriveWorkspace';
+import { LeaderboardPanel } from './components/LeaderboardPanel';
 import { INITIAL_CLOUD_NODES, INITIAL_NETWORK_CONNECTIONS } from './data/mockCloudMesh';
 import { CloudNode } from './types/cloud';
 import { audioSynth } from './utils/audio';
-import { Rocket, Globe, Shield, Activity, Download, ChevronUp, ChevronDown, Bot, Music, Crosshair, Award, HardDrive } from 'lucide-react';
+import { Rocket, Globe, Shield, Activity, Download, ChevronUp, ChevronDown, Bot, Music, Crosshair, Award, HardDrive, Trophy } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'flight' | 'planetary' | 'telemetry' | 'drive' | 'export'>('flight');
+  const [activeTab, setActiveTab] = useState<'flight' | 'planetary' | 'telemetry' | 'leaderboard' | 'drive' | 'export'>('flight');
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [cloudNodes, setCloudNodes] = useState<CloudNode[]>(INITIAL_CLOUD_NODES);
   const [selectedNode, setSelectedNode] = useState<CloudNode | null>(INITIAL_CLOUD_NODES[0]);
@@ -30,12 +31,13 @@ export default function App() {
     speed: 14.0
   });
 
-  const handleScoreUpdate = (score: number, distance: number, nearMisses: number) => {
+  const handleScoreUpdate = (score: number, distance: number, nearMisses: number, difficultyTier?: number) => {
     setTelemetry((prev) => ({
       ...prev,
       score,
       distance,
-      nearMisses
+      nearMisses,
+      difficultyTier: difficultyTier ?? prev.difficultyTier
     }));
   };
 
@@ -172,6 +174,18 @@ export default function App() {
             </button>
 
             <button
+              onClick={() => setActiveTab('leaderboard')}
+              className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
+                activeTab === 'leaderboard'
+                  ? 'bg-amber-400 text-slate-950 shadow-sm shadow-amber-400/30 font-bold'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Trophy className="w-3.5 h-3.5" />
+              <span>Leaderboard</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('drive')}
               className={`px-4 py-2 text-xs font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
                 activeTab === 'drive'
@@ -236,6 +250,7 @@ export default function App() {
               onScoreUpdate={handleScoreUpdate}
               onOpenCopilot={() => setIsCopilotOpen(true)}
               onSaveToDrive={() => setActiveTab('drive')}
+              onOpenLeaderboard={() => setActiveTab('leaderboard')}
             />
 
             {/* Feature Highlights Strip */}
@@ -422,6 +437,16 @@ export default function App() {
           </section>
         )}
 
+        {/* View 3.5: Firestore Persistent High-Score Leaderboard */}
+        {activeTab === 'leaderboard' && (
+          <section className="space-y-6">
+            <LeaderboardPanel
+              currentFlightTelemetry={telemetry}
+              onPlayFlight={() => setActiveTab('flight')}
+            />
+          </section>
+        )}
+
         {/* View 4: Google Drive Workspace App */}
         {activeTab === 'drive' && (
           <section className="space-y-6">
@@ -448,7 +473,7 @@ export default function App() {
       />
 
       {/* Ergonomic Collapsible Bottom Dock (Zero Viewport Occlusion) */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-xl w-[92vw]">
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-2xl w-[94vw]">
         <div className="flex justify-center -mb-2">
           <button
             onClick={() => setIsDockCollapsed(!isDockCollapsed)}
@@ -460,8 +485,8 @@ export default function App() {
         </div>
 
         {!isDockCollapsed && (
-          <div className="bg-slate-900/95 border border-slate-700/80 rounded-2xl p-3 shadow-2xl backdrop-blur-md flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
+          <div className="bg-slate-900/95 border border-slate-700/80 rounded-2xl p-3 shadow-2xl backdrop-blur-md flex items-center justify-between gap-3">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <button
                 onClick={() => setActiveTab('flight')}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${
@@ -477,6 +502,15 @@ export default function App() {
                 }`}
               >
                 Planetary Mesh
+              </button>
+              <button
+                onClick={() => setActiveTab('leaderboard')}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors cursor-pointer flex items-center gap-1 ${
+                  activeTab === 'leaderboard' ? 'bg-amber-400 text-slate-950 font-bold' : 'text-slate-300 hover:text-white'
+                }`}
+              >
+                <Trophy className="w-3 h-3" />
+                <span>Leaderboard</span>
               </button>
               <button
                 onClick={() => setActiveTab('drive')}

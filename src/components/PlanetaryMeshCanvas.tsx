@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { CloudNode, NetworkConnection } from '../types/cloud';
 
@@ -26,6 +26,7 @@ export const PlanetaryMeshCanvas: React.FC<PlanetaryMeshCanvasProps> = ({
   onSelectNode
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [webglError, setWebglError] = useState<string | null>(null);
   const nodesRef = useRef(nodes);
   const selectedNodeIdRef = useRef(selectedNodeId);
   const onSelectNodeRef = useRef(onSelectNode);
@@ -48,10 +49,17 @@ export const PlanetaryMeshCanvas: React.FC<PlanetaryMeshCanvasProps> = ({
     camera.position.set(0, 4, 11);
     camera.lookAt(0, 0, 0);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    mount.appendChild(renderer.domElement);
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      mount.appendChild(renderer.domElement);
+      setWebglError(null);
+    } catch (err) {
+      setWebglError(err instanceof Error ? err.message : 'WebGL unavailable.');
+      return;
+    }
 
     // Planetary Group
     const earthGroup = new THREE.Group();
@@ -290,6 +298,11 @@ export const PlanetaryMeshCanvas: React.FC<PlanetaryMeshCanvasProps> = ({
   return (
     <div className="relative w-full h-full min-h-[520px] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800">
       <div ref={mountRef} className="absolute inset-0 cursor-grab active:cursor-grabbing" />
+      {webglError && (
+        <div className="absolute inset-0 z-20 bg-slate-950/95 flex items-center justify-center p-6 text-center text-xs text-slate-400">
+          3D Planetary Mesh requires WebGL ({webglError}).
+        </div>
+      )}
 
       {/* Subtle UI Guide */}
       <div className="absolute top-4 left-4 z-10 bg-slate-900/80 backdrop-blur-md border border-white/10 px-3.5 py-1.5 rounded-lg text-xs text-slate-400 pointer-events-none flex items-center gap-2">

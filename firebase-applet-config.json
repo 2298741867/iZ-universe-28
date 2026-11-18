@@ -3,6 +3,7 @@
   "appId": "1:12252644240:web:2bdb9e2aadecf854b42915",
   "apiKey": "AIzaSyBZLaKdmlgCJvjOsAHTcS9E0ru3mOPgomE",
   "authDomain": "coffee-spark-ai-barista-43f56.firebaseapp.com",
+  "firestoreDatabaseId": "ai-studio-antigravitymulti-ac53aed9-7aa3-48c6-b8da-fea8da03570c",
   "storageBucket": "coffee-spark-ai-barista-43f56.firebasestorage.app",
   "messagingSenderId": "12252644240",
   "measurementId": "",

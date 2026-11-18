@@ -1,0 +1,73 @@
+{
+  "entities": {
+    "LeaderboardEntry": {
+      "title": "LeaderboardEntry",
+      "description": "A verified Antigravity flight run score record submitted by a pilot.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Authentication UID of the pilot who recorded the flight.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "pilotName": {
+          "type": "string",
+          "description": "Public pilot callsign displayed on the leaderboard.",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "score": {
+          "type": "integer",
+          "description": "Total gravity wells evaded or disintegrated during the flight."
+        },
+        "distance": {
+          "type": "number",
+          "description": "Total astronomical units (AU) traveled during the flight."
+        },
+        "nearMisses": {
+          "type": "integer",
+          "description": "Number of high-risk near-miss couplings performed during the flight."
+        },
+        "difficultyTier": {
+          "type": "integer",
+          "description": "Highest gravitational surge difficulty tier reached."
+        },
+        "isPublic": {
+          "type": "boolean",
+          "description": "Indicates the flight record is published to the global leaderboard."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the flight record was submitted."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the flight record was last updated."
+        }
+      },
+      "required": [
+        "userId",
+        "pilotName",
+        "score",
+        "distance",
+        "nearMisses",
+        "difficultyTier",
+        "isPublic",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/leaderboard/{entryId}": {
+      "schema": {
+        "$ref": "#/entities/LeaderboardEntry"
+      },
+      "description": "Public leaderboard records containing pilot performance metrics (score, distance, nearMisses, difficultyTier) with no PII."
+    }
+  }
+}

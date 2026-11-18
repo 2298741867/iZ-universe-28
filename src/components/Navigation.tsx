@@ -1,9 +1,9 @@
 import React from 'react';
-import { Rocket, Globe, Shield, Activity, Download, Volume2, VolumeX, HardDrive } from 'lucide-react';
+import { Rocket, Globe, Shield, Activity, Download, Volume2, VolumeX, HardDrive, Trophy } from 'lucide-react';
 
 interface NavigationProps {
-  activeTab: 'flight' | 'planetary' | 'telemetry' | 'drive' | 'export';
-  setActiveTab: (tab: 'flight' | 'planetary' | 'telemetry' | 'drive' | 'export') => void;
+  activeTab: 'flight' | 'planetary' | 'telemetry' | 'leaderboard' | 'drive' | 'export';
+  setActiveTab: (tab: 'flight' | 'planetary' | 'telemetry' | 'leaderboard' | 'drive' | 'export') => void;
   audioEnabled: boolean;
   onToggleAudio: () => void;
   onTriggerFlight: () => void;
@@ -63,6 +63,16 @@ export const Navigation: React.FC<NavigationProps> = ({
         >
           <Activity className="w-4 h-4" />
           <span>Multi-Cloud Health</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('leaderboard')}
+          className={`hover:text-white transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 ${
+            activeTab === 'leaderboard' ? 'text-amber-400 font-semibold' : ''
+          }`}
+        >
+          <Trophy className="w-4 h-4 text-amber-400" />
+          <span>Leaderboard</span>
         </button>
 
         <button

@@ -18,14 +18,16 @@ import {
   Mic,
   MicOff,
   HelpCircle,
-  Radio
+  Radio,
+  Trophy
 } from 'lucide-react';
 
 interface AntigravityGameCanvasProps {
-  onScoreUpdate?: (score: number, distance: number, nearMisses: number) => void;
+  onScoreUpdate?: (score: number, distance: number, nearMisses: number, difficultyTier?: number) => void;
   isFullscreen?: boolean;
   onOpenCopilot?: () => void;
   onSaveToDrive?: () => void;
+  onOpenLeaderboard?: () => void;
 }
 
 // Scratch math helpers outside the animation loop to ensure 0 GC allocations
@@ -75,9 +77,11 @@ export const AntigravityGameCanvas: React.FC<AntigravityGameCanvasProps> = ({
   onScoreUpdate,
   isFullscreen = false,
   onOpenCopilot,
-  onSaveToDrive
+  onSaveToDrive,
+  onOpenLeaderboard
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [webglError, setWebglError] = useState<string | null>(null);
 
   // React state for HUD
   const [isPlaying, setIsPlaying] = useState(false);
@@ -251,15 +255,24 @@ export const AntigravityGameCanvas: React.FC<AntigravityGameCanvasProps> = ({
     camera.position.copy(originalCameraPos);
     camera.lookAt(0, 0, -2);
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: !isSoftwareGl,
-      powerPreference: 'high-performance'
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
-    mount.appendChild(renderer.domElement);
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: !isSoftwareGl,
+        powerPreference: 'high-performance'
+      });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(isSoftwareGl ? 1 : Math.min(window.devicePixelRatio, 2));
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+      mount.appendChild(renderer.domElement);
+      setWebglError(null);
+    } catch (err) {
+      setWebglError(
+        err instanceof Error ? err.message : 'WebGL context could not be initialized on this device.'
+      );
+      return;
+    }
 
     // 2. Lighting Rig
     const ambientLight = new THREE.AmbientLight(0x1e293b, 1.2);
@@ -1135,7 +1148,7 @@ export const AntigravityGameCanvas: React.FC<AntigravityGameCanvasProps> = ({
       setShieldEnergy(s.shieldEnergy);
 
       if (onScoreUpdate) {
-        onScoreUpdate(s.score, s.distance, s.nearMisses);
+        onScoreUpdate(s.score, s.distance, s.nearMisses, s.difficultyTier);
       }
 
       renderer.render(scene, camera);
@@ -1185,6 +1198,17 @@ export const AntigravityGameCanvas: React.FC<AntigravityGameCanvasProps> = ({
     <div className={`relative w-full overflow-hidden bg-slate-950 ${isFullscreen ? 'h-screen' : 'h-[620px] rounded-2xl border border-slate-800'}`}>
       {/* Three.js Isolated Canvas Mount */}
       <div ref={mountRef} className="absolute inset-0 w-full h-full cursor-crosshair" />
+
+      {webglError && (
+        <div className="absolute inset-0 z-40 bg-slate-950/95 flex items-center justify-center p-6 text-center">
+          <div className="max-w-md bg-slate-900 border border-amber-500/40 rounded-2xl p-6 space-y-3">
+            <h3 className="text-base font-bold text-amber-300">3D Graphics Context Unavailable</h3>
+            <p className="text-xs text-slate-400">
+              Your browser or GPU driver blocked WebGL initialization ({webglError}). You can still view the Leaderboard, Google Drive App, and Graviton Telemetry tabs.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Screen Edge Flash Overlay */}
       {edgeFlash === 'near-miss' && (
@@ -1650,10 +1674,20 @@ export const AntigravityGameCanvas: React.FC<AntigravityGameCanvasProps> = ({
               </button>
             </div>
 
+            {onOpenLeaderboard && (
+              <button
+                onClick={onOpenLeaderboard}
+                className="w-full mt-3 py-2.5 px-4 rounded-xl font-bold text-xs text-amber-300 bg-amber-950/70 hover:bg-amber-900/70 border border-amber-500/40 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <Trophy className="w-4 h-4 text-amber-400" />
+                <span>SUBMIT SCORE TO LEADERBOARD</span>
+              </button>
+            )}
+
             {onSaveToDrive && (
               <button
                 onClick={onSaveToDrive}
-                className="w-full mt-3 py-2.5 px-4 rounded-xl font-bold text-xs text-cyan-300 bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-950"
+                className="w-full mt-2.5 py-2.5 px-4 rounded-xl font-bold text-xs text-cyan-300 bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-500/50 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-cyan-950"
               >
                 <HardDrive className="w-4 h-4 text-cyan-400" />
                 <span>SAVE FLIGHT TELEMETRY TO GOOGLE DRIVE</span>
